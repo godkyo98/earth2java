@@ -2,14 +2,14 @@ package slexom.earthtojava.entity.passive;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.goal.*;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import slexom.earthtojava.entity.ai.goal.JollyLlamaEatFernGoal;
 import slexom.earthtojava.entity.base.E2JBaseLlamaEntity;
@@ -20,42 +20,42 @@ public class JollyLlamaEntity extends E2JBaseLlamaEntity {
 	private int eatFernTimer;
 	private JollyLlamaEatFernGoal eatFernGoal;
 
-	public JollyLlamaEntity(EntityType<JollyLlamaEntity> type, World worldIn) {
+	public JollyLlamaEntity(EntityType<JollyLlamaEntity> type, Level worldIn) {
 		super(type, worldIn);
 	}
 
-	protected void initGoals() {
+	protected void registerGoals() {
 		eatFernGoal = new JollyLlamaEatFernGoal(this);
-		goalSelector.add(0, new SwimGoal(this));
-		goalSelector.add(1, new EscapeDangerGoal(this, 1.2D));
-		goalSelector.add(1, new HorseBondWithPlayerGoal(this, 1.2D));
-		goalSelector.add(2, new FormCaravanGoal(this, 2.1D));
-		goalSelector.add(4, new AnimalMateGoal(this, 1.0D));
-		goalSelector.add(2, eatFernGoal);
-		goalSelector.add(5, new FollowParentGoal(this, 1.0D));
-		goalSelector.add(6, new WanderAroundFarGoal(this, 0.7D));
-		goalSelector.add(7, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
-		goalSelector.add(8, new LookAroundGoal(this));
+		goalSelector.addGoal(0, new FloatGoal(this));
+		goalSelector.addGoal(1, new PanicGoal(this, 1.2D));
+		goalSelector.addGoal(1, new RunAroundLikeCrazyGoal(this, 1.2D));
+		goalSelector.addGoal(2, new LlamaFollowCaravanGoal(this, 2.1D));
+		goalSelector.addGoal(4, new BreedGoal(this, 1.0D));
+		goalSelector.addGoal(2, eatFernGoal);
+		goalSelector.addGoal(5, new FollowParentGoal(this, 1.0D));
+		goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.7D));
+		goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 6.0F));
+		goalSelector.addGoal(8, new RandomLookAroundGoal(this));
 	}
 
-	protected void mobTick() {
+	protected void customServerAiStep() {
 		eatFernTimer = eatFernGoal.getTimer();
-		super.mobTick();
+		super.customServerAiStep();
 	}
 
-	public void tickMovement() {
-		if (getWorld().isClient) {
+	public void aiStep() {
+		if (level().isClientSide) {
 			eatFernTimer = Math.max(0, eatFernTimer - 1);
 		}
-		super.tickMovement();
+		super.aiStep();
 	}
 
 	@Environment(EnvType.CLIENT)
-	public void handleStatus(byte status) {
+	public void handleEntityEvent(byte status) {
 		if (status == 10) {
 			eatFernTimer = 40;
 		} else {
-			super.handleStatus(status);
+			super.handleEntityEvent(status);
 		}
 
 	}
@@ -75,9 +75,9 @@ public class JollyLlamaEntity extends E2JBaseLlamaEntity {
 	public float getHeadAngle(float delta) {
 		if (eatFernTimer > 4 && eatFernTimer <= 36) {
 			float f = ((float) (eatFernTimer - 4) - delta) / 32.0F;
-			return 0.62831855F + 0.21991149F * MathHelper.sin(f * 28.7F);
+			return 0.62831855F + 0.21991149F * Mth.sin(f * 28.7F);
 		}
-		return eatFernTimer > 0 ? 0.62831855F : getPitch() * 0.017453292F;
+		return eatFernTimer > 0 ? 0.62831855F : getXRot() * 0.017453292F;
 	}
 
 	public void onEatingGrass() {
@@ -92,23 +92,23 @@ public class JollyLlamaEntity extends E2JBaseLlamaEntity {
 	}
 
 	@Override
-	public boolean canEquip(ItemStack stack) {
+	public boolean canTakeItem(ItemStack stack) {
 		return false;
 	}
 
 	@Override
-	public boolean isBreedingItem(ItemStack stack) {
+	public boolean isFood(ItemStack stack) {
 		return false;
 	}
 
 	@Override
-	public boolean canBreedWith(AnimalEntity other) {
+	public boolean canMate(Animal other) {
 		return false;
 	}
 
 	@Override
 	@Nullable
-	public DyeColor getCarpetColor() {
+	public DyeColor getSwag() {
 		return null;
 	}
 }

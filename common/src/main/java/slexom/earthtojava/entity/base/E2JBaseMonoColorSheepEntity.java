@@ -1,88 +1,90 @@
 package slexom.earthtojava.entity.base;
 
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.Shearable;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ShearsItem;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Shearable;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 
 public class E2JBaseMonoColorSheepEntity extends E2JBaseSheepEntity implements Shearable {
 
-	private static final TrackedData<Byte> isSheared = DataTracker.registerData(E2JBaseMonoColorSheepEntity.class, TrackedDataHandlerRegistry.BYTE);
-	private final ItemStack wool;
+    private static final EntityDataAccessor<Byte> isSheared = SynchedEntityData.defineId(E2JBaseMonoColorSheepEntity.class, EntityDataSerializers.BYTE);
+    private final ItemStack wool;
 
-	public E2JBaseMonoColorSheepEntity(EntityType<? extends E2JBaseSheepEntity> type, World world, ItemStack wool) {
-		super(type, world);
-		this.wool = wool;
-		experiencePoints = 3;
-		setAiDisabled(false);
-	}
+    public E2JBaseMonoColorSheepEntity(EntityType<? extends E2JBaseSheepEntity> type, Level world, ItemStack wool) {
+        super(type, world);
+        this.wool = wool;
+    }
 
-	@Override
-	public Identifier getLootTableId() {
-		if (isSheared()) {
-			return new Identifier("minecraft", "entities/sheep");
-		}
-		return getType().getLootTableId();
-	}
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(isSheared, (byte) 0);
+    }
 
-	protected void initDataTracker() {
-		super.initDataTracker();
-		dataTracker.startTracking(isSheared, (byte) 0);
-	}
+    @Override
+    public ResourceKey<LootTable> getDefaultLootTable() {
+        if (isSheared()) {
+            return ResourceKey.create(Registries.LOOT_TABLE, ResourceLocation.withDefaultNamespace("entities/sheep"));
+        }
+        return getType().getDefaultLootTable();
+    }
 
-	public boolean isSheared() {
-		return (dataTracker.get(isSheared) & 16) != 0;
-	}
+    public boolean isSheared() {
+        return (entityData.get(isSheared) & 16) != 0;
+    }
 
-	public void setSheared(boolean sheared) {
-		byte b0 = dataTracker.get(isSheared);
-		if (sheared) {
-			dataTracker.set(isSheared, (byte) (b0 | 16));
-		} else {
-			dataTracker.set(isSheared, (byte) (b0 & -17));
-		}
-	}
+    public void setSheared(boolean sheared) {
+        byte b0 = entityData.get(isSheared);
+        if (sheared) {
+            entityData.set(isSheared, (byte) (b0 | 16));
+        } else {
+            entityData.set(isSheared, (byte) (b0 & -17));
+        }
+    }
 
-	public boolean isShearable() {
-		return isAlive() && !isSheared() && !isBaby();
-	}
+    public boolean readyForShearing() {
+        return isAlive() && !isSheared() && !isBaby();
+    }
 
-	public ActionResult interactMob(PlayerEntity player, Hand hand) {
-		ItemStack itemStack = player.getStackInHand(hand);
-		if (itemStack.getItem() instanceof ShearsItem) {
-			if (!getWorld().isClient && isShearable()) {
-				sheared(SoundCategory.PLAYERS);
-				itemStack.damage(1, player, (playerEntity) -> playerEntity.sendToolBreakStatus(hand));
-				return ActionResult.SUCCESS;
-			}
-			return ActionResult.CONSUME;
-		}
-		return super.interactMob(player, hand);
-	}
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
 
-	public void sheared(SoundCategory shearedSoundCategory) {
-		getWorld().playSoundFromEntity(null, this, SoundEvents.ENTITY_SHEEP_SHEAR, shearedSoundCategory, 1.0F, 1.0F);
-		setSheared(true);
-		int i = 1 + random.nextInt(3);
-		for (int j = 0; j < i; ++j) {
-			ItemEntity itemEntity = dropItem(wool.getItem(), 1);
-			if (itemEntity != null) {
-				itemEntity.setVelocity(itemEntity.getVelocity().add((random.nextFloat() - random.nextFloat()) * 0.1F, random.nextFloat() * 0.05F, (random.nextFloat() - random.nextFloat()) * 0.1F));
-			}
-		}
-	}
+        if (itemStack.is(Items.SHEARS)) {
+            if (!level().isClientSide && readyForShearing()) {
+                shear(SoundSource.PLAYERS);
+                itemStack.hurtAndBreak(1, player, getSlotForHand(hand));
+                return InteractionResult.SUCCESS;
+            }
+            return InteractionResult.CONSUME;
+        }
+        return super.mobInteract(player, hand);
+    }
+
+    public void shear(SoundSource soundSource) {
+        level().playSound(null, this, SoundEvents.SHEEP_SHEAR, soundSource, 1.0F, 1.0F);
+        setSheared(true);
+        int i = 1 + random.nextInt(3);
+        for (int j = 0; j < i; ++j) {
+            ItemEntity itemEntity = spawnAtLocation(wool.getItem(), 1);
+            if (itemEntity != null) {
+                itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().add((random.nextFloat() - random.nextFloat()) * 0.1F, random.nextFloat() * 0.05F, (random.nextFloat() - random.nextFloat()) * 0.1F));
+            }
+        }
+    }
 
 }

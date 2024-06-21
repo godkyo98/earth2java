@@ -1,11 +1,11 @@
 package slexom.earthtojava.mixins;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,11 +15,11 @@ import slexom.earthtojava.entity.base.E2JBaseMonoColorSheepEntity;
 @Mixin(DyeItem.class)
 public class DyeItemMixin {
 
-	@Inject(at = @At("HEAD"), method = "useOnEntity", cancellable = true)
-	public void e2jUseOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand, CallbackInfoReturnable<ActionResult> returnable) {
-		if (entity instanceof E2JBaseMonoColorSheepEntity) {
-			returnable.setReturnValue(ActionResult.PASS);
-		}
-	}
+    @Inject(at = @At("HEAD"), method = "interactLivingEntity", cancellable = true)
+    public void e2j_interactLivingEntity(ItemStack stack, Player user, LivingEntity entity, InteractionHand hand, CallbackInfoReturnable<InteractionResult> returnable) {
+        if (entity instanceof E2JBaseMonoColorSheepEntity) {
+            returnable.setReturnValue(InteractionResult.PASS);
+        }
+    }
 
 }

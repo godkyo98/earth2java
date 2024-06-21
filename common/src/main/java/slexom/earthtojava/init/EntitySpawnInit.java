@@ -3,14 +3,16 @@ package slexom.earthtojava.init;
 import dev.architectury.registry.level.biome.BiomeModifications;
 import dev.architectury.registry.registries.RegistrySupplier;
 import me.shedaniel.autoconfig.AutoConfig;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnGroup;
+import net.minecraft.world.entity.*;
+import net.minecraft.entity.MobCategory;
 import net.minecraft.entity.SpawnRestriction;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.entity.passive.Animal;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.SpawnSettings;
+import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.levelgen.Heightmap;
 import slexom.earthtojava.config.ModConfig;
 import slexom.earthtojava.mixins.SpawnRestrictionAccessor;
 import slexom.earthtojava.utils.EntitySpawnConfigHolder;
@@ -82,12 +84,12 @@ public final class EntitySpawnInit {
 		registerMonsterSpawnRestriction(EntityTypesInit.VILER_WITCH_REGISTRY_OBJECT);
 	}
 
-	private static <T extends AnimalEntity> void registerCreatureSpawnRestriction(RegistrySupplier<EntityType<T>> entity) {
-		SpawnRestrictionAccessor.callRegister(entity.get(), SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, AnimalEntity::isValidNaturalSpawn);
+	private static <T extends Animal> void registerCreatureSpawnRestriction(RegistrySupplier<EntityType<T>> entity) {
+		SpawnRestrictionAccessor.callRegister(entity.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
 	}
 
-	private static <T extends HostileEntity> void registerMonsterSpawnRestriction(RegistrySupplier<EntityType<T>> entity) {
-		SpawnRestrictionAccessor.callRegister(entity.get(), SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, HostileEntity::canSpawnInDark);
+	private static <T extends Monster> void registerMonsterSpawnRestriction(RegistrySupplier<EntityType<T>> entity) {
+		SpawnRestrictionAccessor.callRegister(entity.get(), SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Monster::checkMonsterSpawnRules);
 	}
 
 	private static void manageAnimalEntities() {
@@ -154,32 +156,32 @@ public final class EntitySpawnInit {
 		registerMonsterEntitySpawn(EntityTypesInit.VILER_WITCH_REGISTRY_OBJECT, new EntitySpawnConfigHolder(SpawnPredicates.VILER_WITCH_SPAWN_BIOMES_PREDICATE, config.vilerWitch));
 	}
 
-	private static <T extends AnimalEntity> void registerAnimalEntitySpawn(RegistrySupplier<EntityType<T>> entity, EntitySpawnConfigHolder configHolder) {
+	private static <T extends Animal> void registerAnimalEntitySpawn(RegistrySupplier<EntityType<T>> entity, EntitySpawnConfigHolder configHolder) {
 		if (configHolder.canSpawn()) {
 			setCreatureSpawnBiomes(entity, configHolder.predicate(), configHolder.weight(), configHolder.groupMin(), configHolder.groupMax());
 		}
 	}
 
-	private static <T extends HostileEntity> void registerMonsterEntitySpawn(RegistrySupplier<EntityType<T>> entity, EntitySpawnConfigHolder configHolder) {
+	private static <T extends Monster> void registerMonsterEntitySpawn(RegistrySupplier<EntityType<T>> entity, EntitySpawnConfigHolder configHolder) {
 		if (configHolder.canSpawn()) {
 			setMonsterSpawnBiomes(entity, configHolder.predicate(), configHolder.weight(), configHolder.groupMin(), configHolder.groupMax());
 		}
 	}
 
 
-	private static <T extends Entity> void addEntityToBiomes(RegistrySupplier<EntityType<T>> entity, Predicate<BiomeModifications.BiomeContext> predicate, int weight, int minGroupSize, int maxGroupSize, SpawnGroup classification) {
+	private static <T extends Entity> void addEntityToBiomes(RegistrySupplier<EntityType<T>> entity, Predicate<BiomeModifications.BiomeContext> predicate, int weight, int minGroupSize, int maxGroupSize, MobCategory classification) {
 		BiomeModifications.addProperties(predicate, (biomeContext, mutable) -> {
-			SpawnSettings.SpawnEntry spawnEntry = new SpawnSettings.SpawnEntry(entity.get(), weight, minGroupSize, maxGroupSize);
+			MobSpawnSettings.SpawnerData spawnEntry = new MobSpawnSettings.SpawnerData(entity.get(), weight, minGroupSize, maxGroupSize);
 			mutable.getSpawnProperties().addSpawn(classification, spawnEntry);
 		});
 	}
 
-	private static <T extends AnimalEntity> void setCreatureSpawnBiomes(RegistrySupplier<EntityType<T>> entity, Predicate<BiomeModifications.BiomeContext> predicate, int weight, int minGroupCountIn, int maxGroupCountIn) {
-		addEntityToBiomes(entity, predicate, weight, minGroupCountIn, maxGroupCountIn, SpawnGroup.CREATURE);
+	private static <T extends Animal> void setCreatureSpawnBiomes(RegistrySupplier<EntityType<T>> entity, Predicate<BiomeModifications.BiomeContext> predicate, int weight, int minGroupCountIn, int maxGroupCountIn) {
+		addEntityToBiomes(entity, predicate, weight, minGroupCountIn, maxGroupCountIn, MobCategory.CREATURE);
 	}
 
-	private static <T extends HostileEntity> void setMonsterSpawnBiomes(RegistrySupplier<EntityType<T>> entity, Predicate<BiomeModifications.BiomeContext> predicate, int weight, int minGroupCountIn, int maxGroupCountIn) {
-		addEntityToBiomes(entity, predicate, weight, minGroupCountIn, maxGroupCountIn, SpawnGroup.MONSTER);
+	private static <T extends Monster> void setMonsterSpawnBiomes(RegistrySupplier<EntityType<T>> entity, Predicate<BiomeModifications.BiomeContext> predicate, int weight, int minGroupCountIn, int maxGroupCountIn) {
+		addEntityToBiomes(entity, predicate, weight, minGroupCountIn, maxGroupCountIn, MobCategory.MONSTER);
 	}
 
 

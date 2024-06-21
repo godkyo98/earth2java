@@ -1,31 +1,32 @@
 package slexom.earthtojava.entity.ai.goal;
 
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.player.Player;
 import slexom.earthtojava.entity.passive.HornedSheepEntity;
 
-public class HornedSheepActiveTargetGoal extends ActiveTargetGoal<PlayerEntity> {
-	public HornedSheepActiveTargetGoal(HornedSheepEntity sheepEntity) {
-		super(sheepEntity, PlayerEntity.class, true);
-	}
+public class HornedSheepActiveTargetGoal extends NearestAttackableTargetGoal<Player> {
+    public HornedSheepActiveTargetGoal(HornedSheepEntity sheepEntity) {
+        super(sheepEntity, Player.class, true);
+    }
 
-	@Override
-	public boolean canStart() {
-		return canCharge() && super.canStart();
-	}
+    @Override
+    public boolean canUse() {
+        return canCharge() && super.canUse();
+    }
 
-	@Override
-	public boolean shouldContinue() {
-		boolean flag = canCharge();
-		if (flag && mob.getTarget() != null) {
-			return super.shouldContinue();
-		}
-		target = null;
-		return false;
-	}
+    @Override
+    public boolean canContinueToUse() {
+        boolean flag = canCharge();
+        if (flag && mob.getTarget() != null) {
+            return super.canContinueToUse();
+        }
+        target = null;
+        return false;
+    }
 
-	private boolean canCharge() {
-		HornedSheepEntity sheepEntity = (HornedSheepEntity) mob;
-		return sheepEntity.isAngry();
-	}
+    private boolean canCharge() {
+        HornedSheepEntity sheepEntity = (HornedSheepEntity) mob;
+
+        return sheepEntity.isAngry();
+    }
 }

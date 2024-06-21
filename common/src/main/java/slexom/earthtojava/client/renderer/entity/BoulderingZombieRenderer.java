@@ -2,31 +2,31 @@ package slexom.earthtojava.client.renderer.entity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.ZombieBaseEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.AbstractZombieRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
 import slexom.earthtojava.client.renderer.entity.model.BoulderingZombieModel;
 import slexom.earthtojava.entity.monster.BoulderingZombieEntity;
 import slexom.earthtojava.init.EntityModelLayersInit;
 import slexom.earthtojava.init.RegistryNames;
 
 @Environment(EnvType.CLIENT)
-public class BoulderingZombieRenderer extends ZombieBaseEntityRenderer<BoulderingZombieEntity, BoulderingZombieModel<BoulderingZombieEntity>> {
+public class BoulderingZombieRenderer extends AbstractZombieRenderer<BoulderingZombieEntity, BoulderingZombieModel<BoulderingZombieEntity>> {
 
-	public BoulderingZombieRenderer(EntityRendererFactory.Context context) {
-		this(context, EntityModelLayersInit.BOULDERING_ZOMBIE_ENTITY_MODEL_LAYER, EntityModelLayers.ZOMBIE_INNER_ARMOR, EntityModelLayers.ZOMBIE_OUTER_ARMOR);
-	}
+    public BoulderingZombieRenderer(EntityRendererProvider.Context context) {
+        this(context, EntityModelLayersInit.BOULDERING_ZOMBIE_ENTITY_MODEL_LAYER, ModelLayers.ZOMBIE_INNER_ARMOR, ModelLayers.ZOMBIE_OUTER_ARMOR);
+    }
 
-	public BoulderingZombieRenderer(EntityRendererFactory.Context ctx, EntityModelLayer layer, EntityModelLayer legsArmorLayer, EntityModelLayer bodyArmorLayer) {
-		super(ctx, new BoulderingZombieModel<>(ctx.getPart(layer)), new BoulderingZombieModel<>(ctx.getPart(legsArmorLayer)), new BoulderingZombieModel<>(ctx.getPart(bodyArmorLayer)));
-	}
+    public BoulderingZombieRenderer(EntityRendererProvider.Context context, ModelLayerLocation layer, ModelLayerLocation legsArmorLayer, ModelLayerLocation bodyArmorLayer) {
+        super(context, new BoulderingZombieModel<>(context.bakeLayer(layer)), new BoulderingZombieModel<>(context.bakeLayer(legsArmorLayer)), new BoulderingZombieModel<>(context.bakeLayer(bodyArmorLayer)));
+    }
 
-	public Identifier getTexture(BoulderingZombieEntity entity) {
-		Identifier texture = TextureUtils.getTextureIdentifier("zombie", RegistryNames.BOULDERING_ZOMBIE_REGISTRY_NAME);
-		Identifier textureBlink = TextureUtils.getTextureIdentifier("zombie", RegistryNames.BOULDERING_ZOMBIE_REGISTRY_NAME, "blink");
-		return entity.blinkManager.getBlinkRemainingTicks() > 0 ? textureBlink : texture;
-	}
+    public ResourceLocation getTextureLocation(BoulderingZombieEntity entity) {
+        ResourceLocation texture = TextureUtils.getTextureIdentifier("zombie", RegistryNames.BOULDERING_ZOMBIE_REGISTRY_NAME);
+        ResourceLocation textureBlink = TextureUtils.getTextureIdentifier("zombie", RegistryNames.BOULDERING_ZOMBIE_REGISTRY_NAME, "blink");
+        return entity.blinkManager.getBlinkRemainingTicks() > 0 ? textureBlink : texture;
+    }
 
 }

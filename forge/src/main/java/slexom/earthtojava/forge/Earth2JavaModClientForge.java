@@ -2,7 +2,7 @@ package slexom.earthtojava.forge;
 
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -41,7 +41,7 @@ public class Earth2JavaModClientForge {
 
 	@SubscribeEvent
 	public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
-		for (Map.Entry<EntityModelLayer, Supplier<TexturedModelData>> entry : EntityModelLayersInit.E2J_MODEL_LAYERS.entrySet()) {
+		for (Map.Entry<ModelLayerLocation, Supplier<TexturedModelData>> entry : EntityModelLayersInit.E2J_MODEL_LAYERS.entrySet()) {
 			event.registerLayerDefinition(entry.getKey(), entry.getValue());
 		}
 	}

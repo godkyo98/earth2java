@@ -4,7 +4,7 @@ import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
-import net.minecraft.entity.EntityType;
+import net.minecraft.world.entity.EntityType;
 import slexom.earthtojava.client.renderer.block.entity.RainbowBedBlockEntityRenderer;
 import slexom.earthtojava.client.renderer.entity.*;
 import slexom.earthtojava.entity.base.*;

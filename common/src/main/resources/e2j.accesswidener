@@ -1,9 +1,9 @@
 accessWidener v1 named
 
-accessible field net/minecraft/client/render/entity/model/ChickenEntityModel head Lnet/minecraft/client/model/ModelPart;
+accessible field net/minecraft/client/model/ChickenModel head Lnet/minecraft/client/model/geom/ModelPart;
 
-accessible class net/minecraft/block/entity/BlockEntityType$BlockEntityFactory
-accessible class net/minecraft/village/raid/Raid$Member
+accessible class net/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier
+accessible class net/minecraft/world/entity/raid/Raid$RaiderType
 
-accessible method net/minecraft/block/FireBlock registerFlammableBlock (Lnet/minecraft/block/Block;II)V
-accessible method net/minecraft/block/CarvedPumpkinBlock spawnEntity (Lnet/minecraft/world/World;Lnet/minecraft/block/pattern/BlockPattern$Result;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/BlockPos;)V
+accessible method net/minecraft/world/level/block/FireBlock setFlammable (Lnet/minecraft/world/level/block/Block;II)V
+accessible method net/minecraft/world/level/block/CarvedPumpkinBlock spawnGolemInWorld (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/block/state/pattern/BlockPattern$BlockPatternMatch;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/core/BlockPos;)V

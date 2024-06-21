@@ -1,21 +1,21 @@
 package slexom.earthtojava.entity.ai.goal;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.RevengeGoal;
-import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import slexom.earthtojava.entity.passive.HornedSheepEntity;
 
-public class HornedSheepRevengeGoal extends RevengeGoal {
+public class HornedSheepRevengeGoal extends HurtByTargetGoal {
 
-	public HornedSheepRevengeGoal(HornedSheepEntity mob) {
-		super(mob);
-	}
+    public HornedSheepRevengeGoal(HornedSheepEntity mob) {
+        super(mob);
+    }
 
-	@Override
-	protected void setMobEntityTarget(MobEntity mob, LivingEntity target) {
-		if (mob instanceof HornedSheepEntity && this.mob.canSee(target) && ((HornedSheepEntity) mob).setSheepAttacker(target)) {
-			mob.setTarget(target);
-		}
-	}
+    @Override
+    protected void alertOther(Mob mob, LivingEntity target) {
+        if (mob instanceof HornedSheepEntity && this.mob.hasLineOfSight(target) && ((HornedSheepEntity) mob).setSheepAttacker(target)) {
+            mob.setTarget(target);
+        }
+    }
 
 }

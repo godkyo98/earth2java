@@ -1,41 +1,39 @@
 package slexom.earthtojava.entity.base;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.passive.ChickenEntity;
-import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.Chicken;
+import net.minecraft.world.entity.AgeableMob;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
 import slexom.earthtojava.entity.BlinkManager;
 import slexom.earthtojava.entity.EntityVariantManager;
 
-public class E2JBaseChickenEntity extends ChickenEntity {
+public class E2JBaseChickenEntity extends Chicken {
 
 	public final BlinkManager blinkManager;
 	private final EntityVariantManager<E2JBaseChickenEntity> variantManager;
 
-	public E2JBaseChickenEntity(EntityType<? extends ChickenEntity> type, World worldIn) {
+	public E2JBaseChickenEntity(EntityType<? extends Chicken> type, Level worldIn) {
 		super(type, worldIn);
 		blinkManager = new BlinkManager();
 		variantManager = new EntityVariantManager<>();
-		experiencePoints = 3;
-		setAiDisabled(false);
 	}
 
-	public static DefaultAttributeContainer.Builder createChickenAttributes() {
-		return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 4.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25D);
+	public static AttributeSupplier.Builder createChickenAttributes() {
+		return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 4.0D).add(Attributes.MOVEMENT_SPEED, 0.25D);
 	}
 
 	@Override
-	public void tickMovement() {
-		super.tickMovement();
+	public void aiStep() {
+		super.aiStep();
 		blinkManager.tickBlink();
 	}
 
 	@Override
-	public E2JBaseChickenEntity createChild(ServerWorld world, PassiveEntity other) {
+	public E2JBaseChickenEntity getBreedOffspring(ServerLevel world, AgeableMob other) {
 		return variantManager.getChild(this, other).create(world);
 	}
 

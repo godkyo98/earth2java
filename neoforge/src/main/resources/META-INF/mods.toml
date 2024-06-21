@@ -1,32 +1,35 @@
 modLoader = "javafml"
-loaderVersion = "[47.1,)"
+loaderVersion = "[4,)"
 license = "MIT"
 
 [[mods]]
 modId = "earthtojavamobs"
-version = "${modVersion}"
+version = "1.10.2"
 displayName = "Earth2Java"
 authors = "Slexom"
 description = "Bring mobs from Minecraft Earth to Minecraft Java Edition"
 logoFile = "icon.png"
 
 [[dependencies.earthtojavamobs]]
-modId = "forge"
-mandatory = true
-versionRange = "[47.1,)"
+modId = "neoforge"
+type = "required"
+versionRange = "[21,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.earthtojavamobs]]
 modId = "minecraft"
-mandatory = true
-versionRange = "[1.20,)"
+type = "required"
+versionRange = "[1.21,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.earthtojavamobs]]
 modId = "architectury"
-mandatory = true
-versionRange = "[9,)"
+type = "required"
+versionRange = "[13,)"
 ordering = "AFTER"
 side = "BOTH"
+
+[[mixins]]
+config = "earthtojava-common.mixins.json"

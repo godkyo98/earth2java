@@ -1,24 +1,24 @@
 package slexom.earthtojava.entity.passive;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.level.Level;
 import slexom.earthtojava.entity.ai.goal.FancyChickenFleeFromPigEntityGoal;
 import slexom.earthtojava.entity.base.E2JBaseChickenEntity;
 import slexom.earthtojava.init.SoundEventsInit;
 
 public class FancyChickenEntity extends E2JBaseChickenEntity {
 
-	public FancyChickenEntity(EntityType<FancyChickenEntity> type, World world) {
+	public FancyChickenEntity(EntityType<FancyChickenEntity> type, Level world) {
 		super(type, world);
 	}
 
 	@Override
-	protected void initGoals() {
-		super.initGoals();
-		goalSelector.add(3, new FancyChickenFleeFromPigEntityGoal(this, PigEntity.class, 6.0F, 1.0D, 1.2D));
+	protected void registerGoals() {
+		super.registerGoals();
+		goalSelector.addGoal(3, new FancyChickenFleeFromPigEntityGoal(this, Pig.class, 6.0F, 1.0D, 1.2D));
 	}
 
 	protected SoundEvent getAmbientSound() {

@@ -1,58 +1,58 @@
 package slexom.earthtojava.entity.monster;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.world.World;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.level.Level;
 import slexom.earthtojava.entity.ai.pathing.ClimberNavigation;
 import slexom.earthtojava.entity.base.E2JBaseZombieEntity;
 
 public class BoulderingZombieEntity extends E2JBaseZombieEntity {
-	private static final TrackedData<Byte> IS_CLIMBING = DataTracker.registerData(BoulderingZombieEntity.class, TrackedDataHandlerRegistry.BYTE);
+	private static final EntityDataAccessor<Byte> IS_CLIMBING = SynchedEntityData.defineId(BoulderingZombieEntity.class, EntityDataSerializers.BYTE);
 
-	public BoulderingZombieEntity(EntityType<? extends ZombieEntity> entityType, World world) {
+	public BoulderingZombieEntity(EntityType<? extends Zombie> entityType, Level world) {
 		super(entityType, world);
 	}
 
-	protected EntityNavigation createNavigation(World world) {
+	protected PathNavigation createNavigation(Level world) {
 		return new ClimberNavigation(this, world);
 	}
 
-	protected void initDataTracker() {
-		super.initDataTracker();
-		dataTracker.startTracking(IS_CLIMBING, (byte) 0);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(IS_CLIMBING, (byte) 0);
+	}
+
+	public boolean onClimbable() {
+		return isClimbing();
 	}
 
 	public boolean isClimbing() {
-		return isClimbingWall();
+		return (entityData.get(IS_CLIMBING) & 1) != 0;
 	}
 
-	public boolean isClimbingWall() {
-		return (dataTracker.get(IS_CLIMBING) & 1) != 0;
-	}
-
-	public void setClimbingWall(boolean climbing) {
-		byte b = dataTracker.get(IS_CLIMBING);
+	public void setClimbing(boolean climbing) {
+		byte b = entityData.get(IS_CLIMBING);
 		if (climbing) {
 			b = (byte) (b | 1);
 		} else {
 			b &= -2;
 		}
-		dataTracker.set(IS_CLIMBING, b);
+		entityData.set(IS_CLIMBING, b);
 	}
 
 	public void tick() {
 		super.tick();
-		if (!getWorld().isClient) {
-			setClimbingWall(horizontalCollision);
+		if (!level().isClientSide) {
+			setClimbing(horizontalCollision);
 		}
 	}
 
 	@Override
-	public boolean isHoldingOntoLadder() {
-		return isClimbingWall() || super.isHoldingOntoLadder();
+	public boolean isSuppressingSlidingDownLadder() {
+		return isClimbing() || super.isSuppressingSlidingDownLadder();
 	}
 }

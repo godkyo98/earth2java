@@ -1,48 +1,48 @@
 package slexom.earthtojava.entity.ai.pathing;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.pathing.MobNavigation;
-import net.minecraft.entity.ai.pathing.Path;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.pathfinder.Path;
 
-public class ClimberNavigation extends MobNavigation {
+public class ClimberNavigation extends GroundPathNavigation {
 	private BlockPos targetPos;
 
-	public ClimberNavigation(MobEntity mobEntity, World world) {
+	public ClimberNavigation(Mob mobEntity, Level world) {
 		super(mobEntity, world);
 	}
 
 	@Override
-	public Path findPathTo(BlockPos target, int distance) {
+	public Path createPath(BlockPos target, int distance) {
 		targetPos = target;
-		return super.findPathTo(target, distance);
+		return super.createPath(target, distance);
 	}
 
 	@Override
-	public Path findPathTo(Entity entity, int distance) {
-		targetPos = entity.getBlockPos();
-		return super.findPathTo(entity, distance);
+	public Path createPath(Entity entity, int distance) {
+		targetPos = entity.blockPosition();
+		return super.createPath(entity, distance);
 	}
 
 	@Override
-	public boolean startMovingTo(Entity entity, double speed) {
-		Path path = findPathTo(entity, 0);
+	public boolean moveTo(Entity entity, double speed) {
+		Path path = createPath(entity, 0);
 		if (path != null) {
-			return startMovingAlong(path, speed);
+			return moveTo(path, speed);
 		}
-		targetPos = entity.getBlockPos();
-		this.speed = speed;
+		targetPos = entity.blockPosition();
+		speedModifier = speed;
 		return true;
 	}
 
 	@Override
 	public void tick() {
-		if (isIdle()) {
+		if (isDone()) {
 			if (targetPos != null) {
-				if (!targetPos.isWithinDistance(entity.getPos(), Math.max(entity.getWidth(), 1.0D)) && ((entity.getY() <= targetPos.getY()) || !(BlockPos.ofFloored(targetPos.getX(), entity.getY(), targetPos.getZ())).isWithinDistance(entity.getPos(), Math.max(entity.getWidth(), 1.0D)))) {
-					entity.getMoveControl().moveTo(targetPos.getX(), targetPos.getY(), targetPos.getZ(), speed);
+				if (!targetPos.closerToCenterThan(mob.position(), Math.max(mob.getBbWidth(), 1.0D)) && ((mob.getY() <= targetPos.getY()) || !(BlockPos.containing(targetPos.getX(), mob.getY(), targetPos.getZ())).closerToCenterThan(mob.position(), Math.max(mob.getBbWidth(), 1.0D)))) {
+					mob.getMoveControl().setWantedPosition(targetPos.getX(), targetPos.getY(), targetPos.getZ(), speedModifier);
 				} else {
 					targetPos = null;
 				}

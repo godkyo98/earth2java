@@ -4,15 +4,15 @@
   "package": "slexom.earthtojava.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "CatEntityRendererMixin",
+    "CatRendererMixin",
     "DyeItemMixin",
-    "EggEntityMixin",
-    "SpawnFurnaceGolem",
+    "ThrownEggMixin",
+    "CarvedPumpkinBlockMixin",
     "SpawnRestrictionAccessor",
-    "WolfEntityMixin"
+    "WolfMixin"
   ],
   "client": [
-    "BuiltinModelItemRendererMixin"
+    "BlockEntityWithoutLevelRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

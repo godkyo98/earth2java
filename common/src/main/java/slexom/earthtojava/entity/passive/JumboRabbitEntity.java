@@ -1,15 +1,15 @@
 package slexom.earthtojava.entity.passive;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.world.World;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
 import slexom.earthtojava.entity.base.E2JBaseRabbitEntity;
 import slexom.earthtojava.init.SoundEventsInit;
 
 public class JumboRabbitEntity extends E2JBaseRabbitEntity {
 
-	public JumboRabbitEntity(EntityType<JumboRabbitEntity> type, World world) {
+	public JumboRabbitEntity(EntityType<JumboRabbitEntity> type, Level world) {
 		super(type, world);
 	}
 

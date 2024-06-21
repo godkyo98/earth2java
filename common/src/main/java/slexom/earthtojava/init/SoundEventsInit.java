@@ -1,8 +1,9 @@
 package slexom.earthtojava.init;
 
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import slexom.earthtojava.Earth2JavaMod;
 import slexom.earthtojava.utils.Utils;
 
@@ -141,8 +142,8 @@ public final class SoundEventsInit {
 	}
 
 	public static RegistrySupplier<SoundEvent> registerSoundEvent(String registryName) {
-		final Identifier identifier = Utils.modIdentifierOf(registryName);
-		return Earth2JavaMod.SOUND_EVENT_REGISTRAR.register(identifier, () -> SoundEvent.of(identifier));
+		final ResourceLocation identifier = Utils.modResourceLocationOf(registryName);
+		return Earth2JavaMod.SOUND_EVENT_REGISTRAR.register(identifier, () -> SoundEvent.createVariableRangeEvent(identifier));
 	}
 
 	private static String getEntitySoundEventName(String registryName, String type) {

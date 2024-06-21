@@ -7,16 +7,16 @@ import dev.architectury.registry.registries.RegistrarManager;
 import dev.architectury.registry.registries.RegistrySupplier;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import slexom.earthtojava.config.ModConfig;
@@ -27,47 +27,47 @@ import java.util.function.Supplier;
 
 public class Earth2JavaMod {
 
-	public static final String MOD_ID = "earthtojavamobs";
-	public static final Supplier<RegistrarManager> REGISTRIES = Suppliers.memoize(() -> RegistrarManager.get(MOD_ID));
+    public static final String MOD_ID = "earthtojavamobs";
+    public static final Supplier<RegistrarManager> REGISTRIES = Suppliers.memoize(() -> RegistrarManager.get(MOD_ID));
 
-	public static final Registrar<BlockEntityType<?>> BLOCK_ENTITY_TYPE_REGISTRAR = REGISTRIES.get().get(RegistryKeys.BLOCK_ENTITY_TYPE);
-	public static final Registrar<Block> BLOCK_REGISTRAR = REGISTRIES.get().get(RegistryKeys.BLOCK);
-	public static final Registrar<EntityType<?>> ENTITY_TYPE_REGISTRAR = REGISTRIES.get().get(RegistryKeys.ENTITY_TYPE);
-	public static final Registrar<Item> ITEM_REGISTRAR = REGISTRIES.get().get(RegistryKeys.ITEM);
-	public static final Registrar<SoundEvent> SOUND_EVENT_REGISTRAR = REGISTRIES.get().get(RegistryKeys.SOUND_EVENT);
-	public static final Registrar<ItemGroup> TABS = REGISTRIES.get().get(RegistryKeys.ITEM_GROUP);
+    public static final Registrar<BlockEntityType<?>> BLOCK_ENTITY_TYPE_REGISTRAR = REGISTRIES.get().get(Registries.BLOCK_ENTITY_TYPE);
+    public static final Registrar<Block> BLOCK_REGISTRAR = REGISTRIES.get().get(Registries.BLOCK);
+    public static final Registrar<EntityType<?>> ENTITY_TYPE_REGISTRAR = REGISTRIES.get().get(Registries.ENTITY_TYPE);
+    public static final Registrar<Item> ITEM_REGISTRAR = REGISTRIES.get().get(Registries.ITEM);
+    public static final Registrar<SoundEvent> SOUND_EVENT_REGISTRAR = REGISTRIES.get().get(Registries.SOUND_EVENT);
+    public static final Registrar<CreativeModeTab> TABS = REGISTRIES.get().get(Registries.CREATIVE_MODE_TAB);
 
-	public static final Identifier ITEM_GROUP_IDENTIFIER = new Identifier(MOD_ID, "group");
+    public static final ResourceLocation ITEM_GROUP_IDENTIFIER = ResourceLocation.fromNamespaceAndPath(MOD_ID, "group");
 
 
-	public static final RegistrySupplier<ItemGroup> CREATIVE_TAB_SUPPLIER = TABS.register(
-			ITEM_GROUP_IDENTIFIER, // Tab ID
-			() -> CreativeTabRegistry.create(
-					Text.translatable("itemGroup.earthtojavamobs.group"), // Tab Name
-					() -> new ItemStack(ItemInit.HORN.get()) // Icon
-			)
-	);
+    public static final RegistrySupplier<CreativeModeTab> CREATIVE_TAB_SUPPLIER = TABS.register(
+            ITEM_GROUP_IDENTIFIER, // Tab ID
+            () -> CreativeTabRegistry.create(
+                    Component.translatable("itemGroup.earthtojavamobs.group"), // Tab Name
+                    () -> new ItemStack(ItemInit.HORN.get()) // Icon
+            )
+    );
 
-	private static final Logger LOGGER = LogManager.getLogger("Earth2Java");
+    private static final Logger LOGGER = LogManager.getLogger("Earth2Java");
 
-	public static void initialize() {
-		ModTags.init();
-		AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
-		ModEvents.init();
-		SoundEventsInit.init();
-		BlockInit.init();
-		BiomeInit.init();
-		EntityTypesInit.init();
-		EntityAttributeInit.init();
-		ItemInit.init();
-		BlockEntityTypeInit.init();
-		LOGGER.info("[Earth2Java] Mod loaded! Enjoy :D");
-	}
+    public static void initialize() {
+        ModTags.init();
+        AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
+        ModEvents.init();
+        SoundEventsInit.init();
+        BlockInit.init();
+        BiomeInit.init();
+        EntityTypesInit.init();
+        EntityAttributeInit.init();
+        ItemInit.init();
+        BlockEntityTypeInit.init();
+        LOGGER.info("[Earth2Java] Mod loaded! Enjoy :D");
+    }
 
-	public static void onPostInit() {
-		BlockInit.onPostInit();
-		EntitySpawnInit.initSpawnRestriction();
-		EntitySpawnInit.init();
-	}
+    public static void onPostInit() {
+        BlockInit.onPostInit();
+        EntitySpawnInit.initSpawnRestriction();
+        EntitySpawnInit.init();
+    }
 
 }

@@ -1,30 +1,30 @@
 package slexom.earthtojava.entity.base;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.level.Level;
 import slexom.earthtojava.entity.BlinkManager;
 
-public class E2JBaseZombieEntity extends ZombieEntity {
+public class E2JBaseZombieEntity extends Zombie {
 
-	public final BlinkManager blinkManager;
+    public final BlinkManager blinkManager;
 
-	public E2JBaseZombieEntity(EntityType<? extends ZombieEntity> entityType, World world) {
-		super(entityType, world);
-		blinkManager = new BlinkManager();
-	}
+    public E2JBaseZombieEntity(EntityType<? extends Zombie> entityType, Level world) {
+        super(entityType, world);
+        blinkManager = new BlinkManager();
+    }
 
-	public static DefaultAttributeContainer.Builder createZombieAttributes() {
-		return HostileEntity.createHostileAttributes().add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.23D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 3.0D).add(EntityAttributes.GENERIC_ARMOR, 2.0D).add(EntityAttributes.ZOMBIE_SPAWN_REINFORCEMENTS);
-	}
+    public static AttributeSupplier.Builder createZombieAttributes() {
+        return Monster.createMonsterAttributes().add(Attributes.FOLLOW_RANGE, 35.0D).add(Attributes.MOVEMENT_SPEED, 0.23D).add(Attributes.ATTACK_DAMAGE, 3.0D).add(Attributes.ARMOR, 2.0D).add(Attributes.SPAWN_REINFORCEMENTS_CHANCE);
+    }
 
-	@Override
-	public void tickMovement() {
-		super.tickMovement();
-		blinkManager.tickBlink();
-	}
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        blinkManager.tickBlink();
+    }
 
 }

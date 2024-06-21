@@ -3,12 +3,12 @@ package slexom.earthtojava.block.entity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.block.BedBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.BedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import slexom.earthtojava.init.BlockEntityTypeInit;
 
 public class RainbowBedBlockEntity extends BlockEntity {
@@ -24,14 +24,14 @@ public class RainbowBedBlockEntity extends BlockEntity {
 	}
 
 	@Override
-	public BlockEntityUpdateS2CPacket toUpdatePacket() {
-		return BlockEntityUpdateS2CPacket.create(this);
+	public ClientboundBlockEntityDataPacket getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
 	}
 
 	@Environment(EnvType.CLIENT)
 	public DyeColor getColor() {
 		if (color == null) {
-			color = ((BedBlock) getCachedState().getBlock()).getColor();
+			color = ((BedBlock) getBlockState().getBlock()).getColor();
 		}
 		return color;
 	}
