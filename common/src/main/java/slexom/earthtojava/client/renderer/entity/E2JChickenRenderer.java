@@ -19,7 +19,7 @@ public class E2JChickenRenderer extends MobRenderer<E2JBaseChickenEntity, Chicke
         this.registryName = registryName;
     }
 
-    protected float getAnimationProgress(E2JBaseChickenEntity chickenEntity, float f) {
+    protected float getBob(E2JBaseChickenEntity chickenEntity, float f) {
         float g = Mth.lerp(f, chickenEntity.oFlap, chickenEntity.flap);
         float h = Mth.lerp(f, chickenEntity.oFlapSpeed, chickenEntity.flapSpeed);
         return (Mth.sin(g) + 1.0F) * h;

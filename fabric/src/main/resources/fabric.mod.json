@@ -24,9 +24,6 @@
     ],
     "modmenu": [
       "slexom.earthtojava.fabric.config.ModMenuIntegration"
-    ],
-    "fabric-datagen": [
-      "slexom.earthtojava.fabric.Earth2JavaDataGen"
     ]
   },
   "mixins": [

@@ -3,7 +3,7 @@ package slexom.earthtojava.init.renderer;
 import dev.architectury.registry.client.level.entity.EntityRendererRegistry;
 import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry;
 import dev.architectury.registry.registries.RegistrySupplier;
-import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.entity.EntityType;
 import slexom.earthtojava.client.renderer.block.entity.RainbowBedBlockEntityRenderer;
 import slexom.earthtojava.client.renderer.entity.*;
@@ -29,9 +29,9 @@ public class EntityRendererInit {
 	}
 
 	private static void registerProjectileRenderer() {
-		EntityRendererRegistry.register(EntityTypesInit.MELON_SEED_PROJECTILE_REGISTRY_OBJECT, FlyingItemEntityRenderer::new);
-		EntityRendererRegistry.register(EntityTypesInit.BONE_SHARD_REGISTRY_OBJECT, FlyingItemEntityRenderer::new);
-		EntityRendererRegistry.register(EntityTypesInit.ROTTEN_FLESH_PROJECTILE_REGISTRY_OBJECT, FlyingItemEntityRenderer::new);
+		EntityRendererRegistry.register(EntityTypesInit.MELON_SEED_PROJECTILE_REGISTRY_OBJECT, ThrownItemRenderer::new);
+		EntityRendererRegistry.register(EntityTypesInit.BONE_SHARD_REGISTRY_OBJECT, ThrownItemRenderer::new);
+		EntityRendererRegistry.register(EntityTypesInit.ROTTEN_FLESH_PROJECTILE_REGISTRY_OBJECT, ThrownItemRenderer::new);
 	}
 
 	private static void registerEntitiesRenderer() {

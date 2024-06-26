@@ -17,7 +17,7 @@ public class MuddyPigRenderer extends MobRenderer<MuddyPigEntity, MuddyPigModel<
 
     public MuddyPigRenderer(EntityRendererProvider.Context context) {
         super(context, new MuddyPigModel<>(context.bakeLayer(EntityModelLayersInit.MUDDY_PIG_ENTITY_MODEL_LAYER)), 0.7F);
-        addLayer(new SaddleLayer<>(this, new MuddyPigModel<>(context.bakeLayer(ModelLayers.PIG_SADDLE)), new ResourceLocation("textures/entity/pig/pig_saddle.png")));
+        addLayer(new SaddleLayer<>(this, new MuddyPigModel<>(context.bakeLayer(ModelLayers.PIG_SADDLE)), ResourceLocation.withDefaultNamespace("textures/entity/pig/pig_saddle.png")));
     }
 
     public ResourceLocation getTextureLocation(MuddyPigEntity entity) {

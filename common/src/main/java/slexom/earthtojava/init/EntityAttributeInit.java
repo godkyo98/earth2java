@@ -4,12 +4,14 @@ import dev.architectury.registry.level.entity.EntityAttributeRegistry;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.IronGolem;
+import net.minecraft.world.entity.animal.Rabbit;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Witch;
 import slexom.earthtojava.entity.base.*;
 import slexom.earthtojava.entity.monster.BoneSpiderEntity;
 import slexom.earthtojava.entity.monster.SkeletonWolfEntity;
 import slexom.earthtojava.entity.passive.HornedSheepEntity;
+import slexom.earthtojava.entity.passive.JumboRabbitEntity;
 import slexom.earthtojava.entity.passive.MelonGolemEntity;
 
 public final class EntityAttributeInit {
@@ -63,7 +65,7 @@ public final class EntityAttributeInit {
         EntityAttributeRegistry.register(EntityTypesInit.MOOLIP_REGISTRY_OBJECT, E2JBaseCowEntity::createCowAttributes);
         EntityAttributeRegistry.register(EntityTypesInit.UMBRA_COW_REGISTRY_OBJECT, E2JBaseCowEntity::createCowAttributes);
         EntityAttributeRegistry.register(EntityTypesInit.WOOLY_COW_REGISTRY_OBJECT, E2JBaseCowEntity::createCowAttributes);
-        EntityAttributeRegistry.register(EntityTypesInit.JUMBO_RABBIT_REGISTRY_OBJECT, E2JBaseRabbitEntity::createRabbitAttributes);
+        EntityAttributeRegistry.register(EntityTypesInit.JUMBO_RABBIT_REGISTRY_OBJECT, JumboRabbitEntity::createAttributes);
         EntityAttributeRegistry.register(EntityTypesInit.FURNACE_GOLEM_REGISTRY_OBJECT, IronGolem::createAttributes);
         EntityAttributeRegistry.register(EntityTypesInit.MELON_GOLEM_REGISTRY_OBJECT, MelonGolemEntity::createMelonGolemAttributes);
         EntityAttributeRegistry.register(EntityTypesInit.TROPICAL_SLIME_REGISTRY_OBJECT, Monster::createMonsterAttributes);
@@ -92,7 +94,7 @@ public final class EntityAttributeInit {
     }
 
     private static void registerBaseRabbitAttributes(RegistrySupplier<EntityType<E2JBaseRabbitEntity>> entityType) {
-        EntityAttributeRegistry.register(entityType, E2JBaseRabbitEntity::createRabbitAttributes);
+        EntityAttributeRegistry.register(entityType, Rabbit::createAttributes);
     }
 
 }

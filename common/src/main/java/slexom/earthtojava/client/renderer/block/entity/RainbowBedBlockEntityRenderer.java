@@ -69,7 +69,7 @@ public class RainbowBedBlockEntityRenderer implements BlockEntityRenderer<Rainbo
         Level world = bedBlockEntity.getLevel();
         if (world != null) {
             BlockState blockState = bedBlockEntity.getBlockState();
-            DoubleBlockCombiner.NeighborCombineResult<RainbowBedBlockEntity> propertySource = DoubleBlockCombiner.combineWithNeigbour(BlockEntityTypeInit.RAINBOW_BED.get(), RainbowBedBlock::getBlockType, RainbowBedBlock::getConnectedDirection, ChestBlock.FACING, blockState, world, bedBlockEntity.blockPosition(), (levelAccessor, blockPos) -> false);
+            DoubleBlockCombiner.NeighborCombineResult<RainbowBedBlockEntity> propertySource = DoubleBlockCombiner.combineWithNeigbour(BlockEntityTypeInit.RAINBOW_BED.get(), RainbowBedBlock::getBlockType, RainbowBedBlock::getConnectedDirection, ChestBlock.FACING, blockState, world, bedBlockEntity.getBlockPos(), (levelAccessor, blockPos) -> false);
             int k = propertySource.apply(new BrightnessCombiner<>()).get(light);
             renderPiece(matrixStack, vertexConsumerProvider, blockState.getValue(RainbowBedBlock.PART) == BedPart.HEAD ? head : foot, blockState.getValue(RainbowBedBlock.FACING), spriteIdentifier, k, overlay, false);
         } else {

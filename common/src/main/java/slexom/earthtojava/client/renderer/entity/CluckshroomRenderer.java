@@ -20,7 +20,8 @@ public class CluckshroomRenderer extends MobRenderer<CluckshroomEntity, Cluckshr
         addLayer(new CluckshroomMushroomFeatureRenderer<>(this, context.getBlockRenderDispatcher()));
     }
 
-    protected float getAnimationProgress(CluckshroomEntity chickenEntity, float f) {
+    @Override
+    protected float getBob(CluckshroomEntity chickenEntity, float f) {
         float g = Mth.lerp(f, chickenEntity.oFlap, chickenEntity.flap);
         float h = Mth.lerp(f, chickenEntity.oFlapSpeed, chickenEntity.flapSpeed);
         return (Mth.sin(g) + 1.0F) * h;

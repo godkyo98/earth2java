@@ -14,7 +14,6 @@ public class E2JEntityRendererFactories {
 
     public static EntityRendererProvider<E2JBaseCowEntity> cowRendererFactory(String identifier) {
         return context -> new E2JCowRenderer(context, identifier);
-
     }
 
     public static EntityRendererProvider<E2JBaseShearableCowEntity> shearableCowRendererFactory(String identifier) {

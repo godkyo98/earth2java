@@ -3,14 +3,12 @@ package slexom.earthtojava.init;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.client.item.TooltipContext;
-import net.minecraft.item.*;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.Nullable;
 import slexom.earthtojava.Earth2JavaMod;
 import slexom.earthtojava.item.BoneShardItem;
@@ -146,10 +144,10 @@ public final class ItemInit {
         RAINBOW_CARPET = registerBlockItem("rainbow_carpet", BlockInit.RAINBOW_CARPET);
         RAINBOW_WOOL = registerBlockItem("rainbow_wool", BlockInit.RAINBOW_WOOL);
 
-        HORN = Earth2JavaMod.ITEM_REGISTRAR.register(Utils.modResourceLocationOf("horn"), () -> new HornItem(new Item.Settings().arch$tab(Earth2JavaMod.CREATIVE_TAB_SUPPLIER).maxCount(64)));
-        FANCY_FEATHER = Earth2JavaMod.ITEM_REGISTRAR.register(Utils.modResourceLocationOf("fancy_feather"), () -> new FancyFeatherItem(new Item.Settings().arch$tab(Earth2JavaMod.CREATIVE_TAB_SUPPLIER).maxCount(64)));
-        BONE_SHARD = Earth2JavaMod.ITEM_REGISTRAR.register(Utils.modResourceLocationOf("bone_shard"), () -> new BoneShardItem(new Item.Settings().arch$tab(Earth2JavaMod.CREATIVE_TAB_SUPPLIER).maxCount(16)));
-        RAINBOW_BED = Earth2JavaMod.ITEM_REGISTRAR.register(Utils.modResourceLocationOf("rainbow_bed"), () -> new BedItem(BlockInit.RAINBOW_BED.get(), (new Item.Settings()).maxCount(1).arch$tab(ItemGroups.BUILDING_BLOCKS)));
+        HORN = Earth2JavaMod.ITEM_REGISTRAR.register(Utils.modResourceLocationOf("horn"), () -> new HornItem(new Item.Properties().arch$tab(Earth2JavaMod.CREATIVE_TAB_SUPPLIER).stacksTo(64)));
+        FANCY_FEATHER = Earth2JavaMod.ITEM_REGISTRAR.register(Utils.modResourceLocationOf("fancy_feather"), () -> new FancyFeatherItem(new Item.Properties().arch$tab(Earth2JavaMod.CREATIVE_TAB_SUPPLIER).stacksTo(64)));
+        BONE_SHARD = Earth2JavaMod.ITEM_REGISTRAR.register(Utils.modResourceLocationOf("bone_shard"), () -> new BoneShardItem(new Item.Properties().arch$tab(Earth2JavaMod.CREATIVE_TAB_SUPPLIER).stacksTo(16)));
+        RAINBOW_BED = Earth2JavaMod.ITEM_REGISTRAR.register(Utils.modResourceLocationOf("rainbow_bed"), () -> new BedItem(BlockInit.RAINBOW_BED.get(), (new Item.Properties()).stacksTo(1).arch$tab(CreativeModeTabs.BUILDING_BLOCKS)));
 
     }
 
@@ -166,10 +164,10 @@ public final class ItemInit {
     }
 
     private static RegistrySupplier<Item> registerBlockItem(String registryName, RegistrySupplier<Block> block) {
-        return Earth2JavaMod.ITEM_REGISTRAR.register(Utils.modResourceLocationOf(registryName), () -> new BlockItem(block.get(), new Item.Settings().arch$tab(Earth2JavaMod.CREATIVE_TAB_SUPPLIER)) {
+        return Earth2JavaMod.ITEM_REGISTRAR.register(Utils.modResourceLocationOf(registryName), () -> new BlockItem(block.get(), new Item.Properties().arch$tab(Earth2JavaMod.CREATIVE_TAB_SUPPLIER)) {
             @Environment(EnvType.CLIENT)
-            public void appendTooltip(ItemStack stack, @Nullable Level world, List<Text> tooltip, TooltipContext context) {
-                Utils.appendE2JTooltip(getTranslationKey() + ".desc", tooltip);
+            public void appendTooltip(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipContext context) {
+                Utils.appendE2JTooltip(getDescriptionId() + ".desc", tooltip);
             }
         });
     }

@@ -18,7 +18,7 @@ public class FancyChickenRenderer extends MobRenderer<FancyChickenEntity, FancyC
         super(context, new FancyChickenModel<>(context.bakeLayer(EntityModelLayersInit.FANCY_CHICKEN_ENTITY_MODEL_LAYER)), 0.3F);
     }
 
-    protected float getAnimationProgress(FancyChickenEntity chickenEntity, float f) {
+    protected float getBob(FancyChickenEntity chickenEntity, float f) {
         float g = Mth.lerp(f, chickenEntity.oFlap, chickenEntity.flap);
         float h = Mth.lerp(f, chickenEntity.oFlapSpeed, chickenEntity.flapSpeed);
         return (Mth.sin(g) + 1.0F) * h;

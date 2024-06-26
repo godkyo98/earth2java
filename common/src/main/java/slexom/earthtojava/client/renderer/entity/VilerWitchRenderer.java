@@ -19,20 +19,23 @@ public class VilerWitchRenderer extends MobRenderer<VilerWitchEntity, VilerWitch
 
     public VilerWitchRenderer(EntityRendererProvider.Context context) {
         super(context, new VilerWitchModel<>(context.bakeLayer(EntityModelLayersInit.VILER_WITCH_ENTITY_MODEL_LAYER)), 0.5F);
-        addLayer(new VilerWitchHeldItemFeatureRenderer<>(this, context.getHeldItemRenderer()));
+        addLayer(new VilerWitchHeldItemFeatureRenderer<>(this, context.getItemInHandRenderer()));
     }
 
+    @Override
     public void render(VilerWitchEntity witchEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
-        model.setLiftingNose(!witchEntity.getMainHandStack().isEmpty());
+        model.setLiftingNose(!witchEntity.getMainHandItem().isEmpty());
         super.render(witchEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 
+    @Override
     public ResourceLocation getTextureLocation(VilerWitchEntity entity) {
         ResourceLocation texture = TextureUtils.getTextureIdentifier("witch", RegistryNames.VILER_WITCH_REGISTRY_NAME);
         ResourceLocation textureBlink = TextureUtils.getTextureIdentifier("witch", RegistryNames.VILER_WITCH_REGISTRY_NAME, "blink");
         return entity.blinkManager.getBlinkRemainingTicks() > 0 ? textureBlink : texture;
     }
 
+    @Override
     protected void scale(VilerWitchEntity witchEntity, PoseStack matrixStack, float f) {
         matrixStack.scale(0.9375F, 0.9375F, 0.9375F);
     }

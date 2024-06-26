@@ -15,7 +15,7 @@ import slexom.earthtojava.init.RegistryNames;
 public class RainbowSheepRenderer extends MobRenderer<RainbowSheepEntity, RainbowSheepModel<RainbowSheepEntity>> {
     public RainbowSheepRenderer(EntityRendererProvider.Context context) {
         super(context, new RainbowSheepModel<>(context.bakeLayer(EntityModelLayersInit.RAINBOW_SHEEP_ENTITY_MODEL_LAYER)), 0.7F);
-        addLayer(new RainbowSheepWoolFeatureRenderer(this, context.getModelLoader()));
+        addLayer(new RainbowSheepWoolFeatureRenderer(this, context.getModelSet()));
     }
 
     @Override

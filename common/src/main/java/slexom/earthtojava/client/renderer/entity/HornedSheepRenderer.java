@@ -16,7 +16,7 @@ public class HornedSheepRenderer extends MobRenderer<HornedSheepEntity, HornedSh
 
     public HornedSheepRenderer(EntityRendererProvider.Context context) {
         super(context, new HornedSheepModel<>(context.bakeLayer(EntityModelLayersInit.HORNED_SHEEP_ENTITY_MODEL_LAYER)), 0.7F);
-        addLayer(new HornedSheepWoolFeatureRenderer(this, context.getModelLoader()));
+        addLayer(new HornedSheepWoolFeatureRenderer(this, context.getModelSet()));
     }
 
     public ResourceLocation getTextureLocation(HornedSheepEntity entity) {

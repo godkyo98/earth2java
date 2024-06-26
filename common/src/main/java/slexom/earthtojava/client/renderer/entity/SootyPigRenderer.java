@@ -17,7 +17,7 @@ public class SootyPigRenderer extends MobRenderer<E2JBasePigEntity, SootyPigMode
 
     public SootyPigRenderer(Context context) {
         super(context, new SootyPigModel(context.bakeLayer(EntityModelLayersInit.SOOTY_PIG_ENTITY_MODEL_LAYER)), 0.7F);
-        addLayer(new SaddleLayer<>(this, new SootyPigModel(context.bakeLayer(ModelLayers.PIG_SADDLE)), new ResourceLocation("textures/entity/pig/pig_saddle.png")));
+        addLayer(new SaddleLayer<>(this, new SootyPigModel(context.bakeLayer(ModelLayers.PIG_SADDLE)), ResourceLocation.withDefaultNamespace("textures/entity/pig/pig_saddle.png")));
     }
 
     @Override

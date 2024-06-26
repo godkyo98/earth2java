@@ -1,6 +1,6 @@
 package slexom.earthtojava.entity.ai.goal;
 
-import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.goal.Goal;
 import slexom.earthtojava.entity.ai.control.TropicalSlimeMoveControl;
 import slexom.earthtojava.entity.passive.TropicalSlimeEntity;
@@ -18,7 +18,7 @@ public class TropicalSlimeFaceRandomGoal extends Goal {
     }
 
     public boolean canUse() {
-        return slime.getTarget() == null && (slime.isOnGround() || slime.isTouchingWater() || slime.isInLava() || slime.hasStatusEffect(StatusEffects.LEVITATION)) && slime.getMoveControl() instanceof TropicalSlimeMoveControl;
+        return slime.getTarget() == null && (slime.onGround() || slime.isInWater() || slime.isInLava() || slime.hasEffect(MobEffects.LEVITATION)) && slime.getMoveControl() instanceof TropicalSlimeMoveControl;
     }
 
     @Override

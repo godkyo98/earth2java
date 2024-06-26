@@ -2,8 +2,8 @@ package slexom.earthtojava.client.renderer.entity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.model.CowModel;
 import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.render.entity.model.CowEntityModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -12,11 +12,11 @@ import slexom.earthtojava.entity.passive.MoolipEntity;
 import slexom.earthtojava.init.RegistryNames;
 
 @Environment(EnvType.CLIENT)
-public class MoolipRenderer extends MobRenderer<MoolipEntity, CowEntityModel<MoolipEntity>> {
+public class MoolipRenderer extends MobRenderer<MoolipEntity, CowModel<MoolipEntity>> {
 
     public MoolipRenderer(EntityRendererProvider.Context context) {
-        super(context, new CowEntityModel<>(context.bakeLayer(ModelLayers.MOOSHROOM)), 0.7F);
-        addLayer(new MoolipPinkDaisyFeatureRenderer<>(this));
+        super(context, new CowModel<>(context.bakeLayer(ModelLayers.MOOSHROOM)), 0.7F);
+        addLayer(new MoolipPinkDaisyFeatureRenderer<>(this, context.getBlockRenderDispatcher()));
     }
 
     public ResourceLocation getTextureLocation(MoolipEntity entity) {

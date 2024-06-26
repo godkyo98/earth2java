@@ -28,7 +28,8 @@ public class LobberZombieEntity extends E2JBaseZombieEntity implements RangedAtt
         super(entityType, world);
     }
 
-    protected void initCustomGoals() {
+    @Override
+    protected void addBehaviourGoals() {
         goalSelector.addGoal(2, new RangedAttackGoal(this, 1.25D, 40, 10.0F));
         goalSelector.addGoal(6, new MoveThroughVillageGoal(this, 1.0D, true, 4, this::canBreakDoors));
         goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));

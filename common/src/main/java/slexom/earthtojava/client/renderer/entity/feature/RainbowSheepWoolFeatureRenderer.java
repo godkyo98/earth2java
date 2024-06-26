@@ -2,7 +2,7 @@ package slexom.earthtojava.client.renderer.entity.feature;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import me.shedaniel.math.Color;
-import net.minecraft.client.render.entity.model.EntityModelLoader;
+import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
@@ -16,9 +16,9 @@ public class RainbowSheepWoolFeatureRenderer extends RenderLayer<RainbowSheepEnt
     private static final ResourceLocation TEXTURE = ResourceLocation.parse("earthtojavamobs:textures/mobs/sheep/rainbow_sheep/rainbow_sheep_fur.png");
     private final RainbowSheepWoolModel<RainbowSheepEntity> sheepModel;
 
-    public RainbowSheepWoolFeatureRenderer(RenderLayerParent<RainbowSheepEntity, RainbowSheepModel<RainbowSheepEntity>> featureRendererContext, EntityModelLoader entityModelLoader) {
+    public RainbowSheepWoolFeatureRenderer(RenderLayerParent<RainbowSheepEntity, RainbowSheepModel<RainbowSheepEntity>> featureRendererContext, EntityModelSet entityModelSet) {
         super(featureRendererContext);
-        sheepModel = new RainbowSheepWoolModel<>(entityModelLoader.bakeLayer(EntityModelLayersInit.RAINBOW_SHEEP_FUR_ENTITY_MODEL_LAYER));
+        sheepModel = new RainbowSheepWoolModel<>(entityModelSet.bakeLayer(EntityModelLayersInit.RAINBOW_SHEEP_FUR_ENTITY_MODEL_LAYER));
     }
 
     public void render(PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int packedLightIn, RainbowSheepEntity livingEntity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {

@@ -19,7 +19,8 @@ public class BoneSpiderRenderer extends MobRenderer<BoneSpiderEntity, SpiderMode
         addLayer(new BoneSpiderEyesFeatureRenderer<>(this));
     }
 
-    protected float getLyingAngle(BoneSpiderEntity spiderEntity) {
+    @Override
+    protected float getFlipDegrees(BoneSpiderEntity spiderEntity) {
         return 180.0F;
     }
 

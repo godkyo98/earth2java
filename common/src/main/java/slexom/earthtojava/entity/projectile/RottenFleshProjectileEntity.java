@@ -20,7 +20,7 @@ public class RottenFleshProjectileEntity extends E2JThrowableItemProjectile {
         super(EntityTypesInit.ROTTEN_FLESH_PROJECTILE_REGISTRY_OBJECT.get(), x, y, z, world);
     }
 
-    public RottenFleshProjectileEntity(EntityType<BoneShardEntity> entityType, Level world) {
+    public RottenFleshProjectileEntity(EntityType<RottenFleshProjectileEntity> entityType, Level world) {
         super(entityType, world);
     }
 

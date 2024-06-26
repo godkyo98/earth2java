@@ -74,23 +74,24 @@ public class JumboRabbitModel<T extends JumboRabbitEntity> extends EntityModel<T
         return LayerDefinition.create(modelData, 64, 64);
     }
 
-    public void render(PoseStack poseStack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
+    @Override
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer bufferIn, int packedLightIn, int packedOverlayIn, int color) {
         if (young) {
             poseStack.pushPose();
             poseStack.scale(0.56666666F, 0.56666666F, 0.56666666F);
             poseStack.translate(0.0D, 1.375D, 0.125D);
-            ImmutableList.of(head, leftEar, rightEar, nose).forEach((modelPart) -> modelPart.render(poseStack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha));
+            ImmutableList.of(head, leftEar, rightEar, nose).forEach((modelPart) -> modelPart.render(poseStack, bufferIn, packedLightIn, packedOverlayIn, color));
             poseStack.popPose();
             poseStack.pushPose();
             poseStack.scale(0.4F, 0.4F, 0.4F);
             poseStack.translate(0.0D, 2.25D, 0.0D);
-            ImmutableList.of(leftHindLeg, rightHindLeg, leftHaunch, rightHaunch, body, leftFrontLeg, rightFrontLeg, tail).forEach(modelPart -> modelPart.render(poseStack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha));
+            ImmutableList.of(leftHindLeg, rightHindLeg, leftHaunch, rightHaunch, body, leftFrontLeg, rightFrontLeg, tail).forEach(modelPart -> modelPart.render(poseStack, bufferIn, packedLightIn, packedOverlayIn, color));
             poseStack.popPose();
         } else {
             poseStack.pushPose();
             poseStack.scale(0.6F, 0.6F, 0.6F);
             poseStack.translate(0.0D, 1.0D, 0.0D);
-            ImmutableList.of(leftHindLeg, rightHindLeg, leftHaunch, rightHaunch, body, leftFrontLeg, rightFrontLeg, head, rightEar, leftEar, tail, nose).forEach(modelPart -> modelPart.render(poseStack, bufferIn, packedLightIn, packedOverlayIn, red, green, blue, alpha));
+            ImmutableList.of(leftHindLeg, rightHindLeg, leftHaunch, rightHaunch, body, leftFrontLeg, rightFrontLeg, head, rightEar, leftEar, tail, nose).forEach(modelPart -> modelPart.render(poseStack, bufferIn, packedLightIn, packedOverlayIn, color));
             poseStack.popPose();
         }
     }

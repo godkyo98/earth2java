@@ -15,7 +15,7 @@ public class TropicalSlimeHopGoal extends Goal {
     }
 
     public boolean canUse() {
-        return !slime.hasVehicle();
+        return !slime.isPassenger();
     }
 
     @Override

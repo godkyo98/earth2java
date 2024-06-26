@@ -1,10 +1,10 @@
 package slexom.earthtojava.entity;
 
 
-import net.minecraft.util.math.random.Random;
+import net.minecraft.util.RandomSource;
 
 public class BlinkManager {
-	private final net.minecraft.util.math.random.Random random = Random.create();
+	private final RandomSource random = RandomSource.create();
 
 	private int lastBlink = 0;
 	private int nextBlinkInterval = random.nextInt(300) + 60;

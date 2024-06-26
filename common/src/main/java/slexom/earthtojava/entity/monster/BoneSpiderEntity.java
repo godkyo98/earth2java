@@ -1,21 +1,21 @@
 package slexom.earthtojava.entity.monster;
 
-import net.minecraft.world.entity.monster.RangedAttackMob;
-import net.minecraft.world.entity.monster.Spider;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.RangedAttackMob;
-import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.entity.mob.SpiderEntity;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import slexom.earthtojava.entity.BlinkManager;
 import slexom.earthtojava.entity.ai.goal.BoneSpiderMeleeAttackGoal;
 import slexom.earthtojava.entity.ai.pathing.ClimberNavigation;
@@ -28,8 +28,6 @@ public class BoneSpiderEntity extends Spider implements RangedAttackMob {
 	public BoneSpiderEntity(EntityType<BoneSpiderEntity> type, Level worldIn) {
 		super(type, worldIn);
 		blinkManager = new BlinkManager();
-		xpReward = 3;
-		setAiDisabled(false);
 	}
 
 	public static AttributeSupplier.Builder createBoneSpiderAttributes() {
@@ -43,32 +41,32 @@ public class BoneSpiderEntity extends Spider implements RangedAttackMob {
 	}
 
 	@Override
-	protected EntityNavigation createNavigation(Level world) {
+	protected PathNavigation createNavigation(Level world) {
 		return new ClimberNavigation(this, world);
 	}
 
 	@Override
 	protected void registerGoals() {
 		goalSelector.addGoal(1, new FloatGoal(this));
-		goalSelector.addGoal(3, new ProjectileAttackGoal(this, 1.0D, 40, 12.0F));
-		goalSelector.addGoal(4, new PounceAtTargetGoal(this, 0.4F));
+		goalSelector.addGoal(3, new RangedAttackGoal(this, 1.0D, 40, 12.0F));
+		goalSelector.addGoal(4, new LeapAtTargetGoal(this, 0.4F));
 		goalSelector.addGoal(4, new BoneSpiderMeleeAttackGoal(this));
 		goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
 		goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
 		goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 		targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		targetSelector.addGoal(2, new ActiveTargetGoal<>(this, Player.class, true));
+		targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
 	}
 
 	@Override
-	public void shootAt(LivingEntity target, float pullProgress) {
+	public void performRangedAttack(LivingEntity target, float pullProgress) {
 		BoneShardEntity boneShard = new BoneShardEntity(level(), this);
 		double d0 = target.getEyeY() - 1.1D;
 		double d1 = target.getX() - getX();
 		double d2 = d0 - boneShard.getY();
 		double d3 = target.getZ() - getZ();
 		double f = Math.sqrt(d1 * d1 + d3 * d3) * 0.2D;
-		boneShard.setVelocity(d1, d2 + f, d3, 1.6F, 8.0F);
+		boneShard.shoot(d1, d2 + f, d3, 1.6F, 8.0F);
 		playSound(SoundEventsInit.BONE_SPIDER_SPIT.get(), 1.0F, 1.2F / (getRandom().nextFloat() * 0.4F + 0.8F));
 		level().addFreshEntity(boneShard);
 	}
