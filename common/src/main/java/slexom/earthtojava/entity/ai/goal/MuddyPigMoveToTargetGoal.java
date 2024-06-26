@@ -5,6 +5,7 @@ import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import slexom.earthtojava.entity.passive.MuddyPigEntity;
 
 public class MuddyPigMoveToTargetGoal extends MoveToBlockGoal {
@@ -13,7 +14,6 @@ public class MuddyPigMoveToTargetGoal extends MoveToBlockGoal {
     public MuddyPigMoveToTargetGoal(MuddyPigEntity entity, double speed) {
         super(entity, speed, 16, 3);
         muddyPig = entity;
-        verticalSearchStart = -1;
     }
 
     @Override
@@ -25,7 +25,8 @@ public class MuddyPigMoveToTargetGoal extends MoveToBlockGoal {
     public boolean canContinueToUse() {
         if (muddyPig.isInMuddyState()) return false;
         if (tryTicks > 600) return false;
-        return isValidTarget(muddyPig.level(), blockPos.below());
+
+        return isValidTarget(muddyPig.level(), blockPos);
     }
 
     @Override
@@ -36,7 +37,8 @@ public class MuddyPigMoveToTargetGoal extends MoveToBlockGoal {
     @Override
     protected boolean isValidTarget(LevelReader worldIn, BlockPos pos) {
         Block block = worldIn.getBlockState(pos).getBlock();
-        return block.equals(Blocks.MUD);
+        BlockState blockState = block.defaultBlockState();
 
+        return blockState.is(Blocks.MUD);
     }
 }

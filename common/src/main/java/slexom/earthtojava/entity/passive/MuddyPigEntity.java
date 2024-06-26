@@ -79,7 +79,7 @@ public class MuddyPigEntity extends E2JBasePigEntity {
 			if (!isInMuddyState()) return;
 
 			outOfMud++;
-			if (outOfMud > 60) {
+			if (outOfMud > 300) {
 				setMuddyState(false);
 				outOfMud = 0;
 			}
