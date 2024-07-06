@@ -18,7 +18,6 @@ public class EntitySpawnBiomeModifier implements BiomeModifier {
         if (phase == Phase.ADD) {
             MobSpawnSettingsBuilder mobSpawnSettings = builder.getMobSpawnSettings();
             for (EntitySpawnConfig mobSpawnConfig : EntitySpawnConfigs.ENTITY_SPAWN_CONFIGS) {
-                System.out.println(mobSpawnConfig.biomeTag());
                 if (biome.is(mobSpawnConfig.biomeTag()) && mobSpawnConfig.shouldSpawn()) {
                     mobSpawnSettings.getSpawner(mobSpawnConfig.category()).add(mobSpawnConfig.spawnerData());
                 }
