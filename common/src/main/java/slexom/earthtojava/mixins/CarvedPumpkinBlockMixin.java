@@ -31,34 +31,36 @@ public class CarvedPumpkinBlockMixin {
     private static Predicate<BlockState> PUMPKINS_PREDICATE;
 
     @Unique
-    private BlockPattern furnaceGolemPattern;
+    private BlockPattern earth2java$furnaceGolemPattern;
     @Unique
-    private BlockPattern furnaceGolemDispenserPattern;
+    private BlockPattern earth2java$furnaceGolemDispenserPattern;
 
-    private BlockPattern e2j_getFurnaceGolemPattern() {
-        if (furnaceGolemPattern == null) {
-            furnaceGolemPattern = BlockPatternBuilder.start().aisle("~^~", "#@#", "~#~").where('@', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.BLAST_FURNACE))).where('^', BlockInWorld.hasState(PUMPKINS_PREDICATE)).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK))).where('~', pos -> pos.getState().isAir()).build();
+    @Unique
+    private BlockPattern earth2java_getFurnaceGolemPattern() {
+        if (earth2java$furnaceGolemPattern == null) {
+            earth2java$furnaceGolemPattern = BlockPatternBuilder.start().aisle("~^~", "#@#", "~#~").where('@', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.BLAST_FURNACE))).where('^', BlockInWorld.hasState(PUMPKINS_PREDICATE)).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK))).where('~', pos -> pos.getState().isAir()).build();
         }
-        return furnaceGolemPattern;
+        return earth2java$furnaceGolemPattern;
     }
 
-    private BlockPattern e2j_getFurnaceGolemDispenserPattern() {
-        if (furnaceGolemDispenserPattern == null) {
-            furnaceGolemDispenserPattern = BlockPatternBuilder.start().aisle("~ ~", "#@#", "~#~").where('@', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.BLAST_FURNACE))).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK))).where('~', pos -> pos.getState().isAir()).build();
+    @Unique
+    private BlockPattern earth2java_getFurnaceGolemDispenserPattern() {
+        if (earth2java$furnaceGolemDispenserPattern == null) {
+            earth2java$furnaceGolemDispenserPattern = BlockPatternBuilder.start().aisle("~ ~", "#@#", "~#~").where('@', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.BLAST_FURNACE))).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK))).where('~', pos -> pos.getState().isAir()).build();
         }
-        return furnaceGolemDispenserPattern;
+        return earth2java$furnaceGolemDispenserPattern;
     }
 
     @Inject(method = "canSpawnGolem", at = @At("RETURN"), cancellable = true)
-    public void e2j_canSpawnGolem(LevelReader levelReader, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
+    public void earth2java_canSpawnGolem(LevelReader levelReader, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
         if (!cir.getReturnValue()) {
-            cir.setReturnValue(e2j_getFurnaceGolemDispenserPattern().find(levelReader, blockPos) != null);
+            cir.setReturnValue(earth2java_getFurnaceGolemDispenserPattern().find(levelReader, blockPos) != null);
         }
     }
 
     @Inject(at = @At("HEAD"), method = "trySpawnGolem")
-    public void e2j_spawnFurnaceGolem(Level level, BlockPos blockPos, CallbackInfo ci) {
-        BlockPattern.BlockPatternMatch result = e2j_getFurnaceGolemPattern().find(level, blockPos);
+    public void earth2java_spawnFurnaceGolem(Level level, BlockPos blockPos, CallbackInfo ci) {
+        BlockPattern.BlockPatternMatch result = earth2java_getFurnaceGolemPattern().find(level, blockPos);
         if (result == null) return;
 
         FurnaceGolemEntity furnaceGolemEntity = EntityTypesInit.FURNACE_GOLEM_REGISTRY_OBJECT.get().create(level);

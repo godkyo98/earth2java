@@ -16,7 +16,7 @@ public class CatRendererMixin {
     final ResourceLocation PEANUT_BUTTER_TEXTURE = ResourceLocation.parse("earthtojavamobs:textures/mobs/cat/peanut_butter/peanut_butter_jellie.png");
 
     @Inject(at = @At("HEAD"), method = "getTextureLocation*", cancellable = true)
-    public void e2j_getTextureLocation(Cat cat, CallbackInfoReturnable<ResourceLocation> cir) {
+    public void earth2java_getTextureLocation(Cat cat, CallbackInfoReturnable<ResourceLocation> cir) {
         String catName = ChatFormatting.stripFormatting(cat.getName().getString());
         if ("Peanut Butter".equals(catName)) {
             cir.setReturnValue(PEANUT_BUTTER_TEXTURE);

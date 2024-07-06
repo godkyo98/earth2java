@@ -20,7 +20,7 @@ public class ThrownEggMixin {
                     target = "Lnet/minecraft/world/entity/EntityType;CHICKEN:Lnet/minecraft/world/entity/EntityType;"
             )
     )
-    public EntityType<?> e2j_onHit() {
+    public EntityType<?> earth2java_onHit() {
         int r = random.nextInt(20);
         return switch (r) {
             case 2 -> EntityTypesInit.AMBER_CHICKEN_REGISTRY_OBJECT.get();

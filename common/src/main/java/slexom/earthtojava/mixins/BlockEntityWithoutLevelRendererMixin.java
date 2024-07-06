@@ -29,7 +29,7 @@ public class BlockEntityWithoutLevelRendererMixin {
     private BlockEntityRenderDispatcher blockEntityRenderDispatcher;
 
     @Inject(at = @At("HEAD"), method = "renderByItem", cancellable = true)
-    private void e2jRenderRainbowBed(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay, CallbackInfo ci) {
+    private void earth2java_RenderRainbowBed(ItemStack stack, ItemDisplayContext mode, PoseStack matrices, MultiBufferSource vertexConsumers, int light, int overlay, CallbackInfo ci) {
         Item item = stack.getItem();
         if (item instanceof BlockItem blockItem) {
             Block block = blockItem.getBlock();

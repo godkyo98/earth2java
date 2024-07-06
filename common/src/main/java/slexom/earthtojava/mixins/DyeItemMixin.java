@@ -16,7 +16,7 @@ import slexom.earthtojava.entity.base.E2JBaseMonoColorSheepEntity;
 public class DyeItemMixin {
 
     @Inject(at = @At("HEAD"), method = "interactLivingEntity", cancellable = true)
-    public void e2j_interactLivingEntity(ItemStack stack, Player user, LivingEntity entity, InteractionHand hand, CallbackInfoReturnable<InteractionResult> returnable) {
+    public void earth2java_interactLivingEntity(ItemStack stack, Player user, LivingEntity entity, InteractionHand hand, CallbackInfoReturnable<InteractionResult> returnable) {
         if (entity instanceof E2JBaseMonoColorSheepEntity) {
             returnable.setReturnValue(InteractionResult.PASS);
         }

@@ -12,7 +12,7 @@ import slexom.earthtojava.init.EntityTypesInit;
 @Mixin(Wolf.class)
 public class WolfMixin {
     @ModifyReturnValue(method = "method_18444(Lnet/minecraft/world/entity/LivingEntity;)Z", at = @At("RETURN"))
-    private static boolean earth2java$followTamedPredicate(boolean original, @NotNull LivingEntity entity) {
+    private static boolean earth2java_followTamedPredicate(boolean original, @NotNull LivingEntity entity) {
         EntityType<?> entityType = entity.getType();
 
         return original
