@@ -56,7 +56,7 @@ public abstract class E2JThrowableItemProjectile extends ThrowableItemProjectile
         super.onHitEntity(entityHitResult);
         playSound(getHitSound(), 1.0F, 1.0F);
         Entity entity = entityHitResult.getEntity();
-        entity.hurt(entity.damageSources().thrown(this, getOwner()), 10.0F);
+        entity.hurt(entity.damageSources().thrown(this, getOwner()), 5.0F);
     }
 
     @Override
