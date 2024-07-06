@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "earthtojavamobs:bone_spider",
+    "earthtojavamobs:bouldering_zombie",
+    "earthtojavamobs:furnace_golem",
+    "earthtojavamobs:lobber_zombie",
+    "earthtojavamobs:skeleton_wolf",
+    "earthtojavamobs:tropical_slime"
+  ]
+}
