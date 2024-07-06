@@ -27,6 +27,7 @@ public final class EntitySpawnInit {
     }
 
     public static void init() {
+        initSpawnRestriction();
         manageAnimalEntities();
         manageMonsterEntities();
     }

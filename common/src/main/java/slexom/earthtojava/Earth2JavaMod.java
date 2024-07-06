@@ -66,7 +66,6 @@ public class Earth2JavaMod {
 
     public static void onPostInit() {
         BlockInit.onPostInit();
-        EntitySpawnInit.initSpawnRestriction();
         EntitySpawnInit.init();
     }
 

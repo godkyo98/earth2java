@@ -4,7 +4,7 @@ license = "MIT"
 
 [[mods]]
 modId = "earthtojavamobs"
-version = "1.10.2"
+version = "1.11.0"
 displayName = "Earth2Java"
 authors = "Slexom"
 description = "Bring mobs from Minecraft Earth to Minecraft Java Edition"

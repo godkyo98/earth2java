@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "minecraft:plains",
+  "features": "earthtojavamobs:earth_flowers",
+  "step": "vegetal_decoration"
+}

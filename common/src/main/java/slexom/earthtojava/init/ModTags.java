@@ -7,7 +7,6 @@ import slexom.earthtojava.utils.Utils;
 
 public class ModTags {
 
-
     public static final TagKey<Biome> HAS_ALBINO_COW = registerBiomeTag("has_albino_cow");
     public static final TagKey<Biome> HAS_AMBER_CHICKEN = registerBiomeTag("has_amber_chicken");
     public static final TagKey<Biome> HAS_ASHEN_COW = registerBiomeTag("has_ashen_cow");

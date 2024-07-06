@@ -7,6 +7,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import slexom.earthtojava.Earth2JavaMod;
 import slexom.earthtojava.client.renderer.block.entity.RainbowBedBlockEntityRenderer;
@@ -15,6 +16,7 @@ import slexom.earthtojava.init.BlockEntityTypeInit;
 import slexom.earthtojava.init.EntityModelLayersInit;
 import slexom.earthtojava.init.EntityTypesInit;
 import slexom.earthtojava.init.RegistryNames;
+import slexom.earthtojava.init.renderer.BlockRendererInit;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -24,17 +26,19 @@ public class Earth2JavaModClientNeoForge {
     public Earth2JavaModClientNeoForge(IEventBus modBus) {
         EntityModelLayersInit.init();
         modBus.register(this);
+        modBus.addListener(this::setup);
+
     }
 
     @SubscribeEvent
-    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+    public void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         for (Map.Entry<ModelLayerLocation, Supplier<LayerDefinition>> entry : EntityModelLayersInit.E2J_MODEL_LAYERS.entrySet()) {
             event.registerLayerDefinition(entry.getKey(), entry.getValue());
         }
     }
 
     @SubscribeEvent
-    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+    public void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
 
         event.registerEntityRenderer(EntityTypesInit.MELON_SEED_PROJECTILE_REGISTRY_OBJECT.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(EntityTypesInit.BONE_SHARD_REGISTRY_OBJECT.get(), ThrownItemRenderer::new);
@@ -98,5 +102,9 @@ public class Earth2JavaModClientNeoForge {
         event.registerEntityRenderer(EntityTypesInit.BOLD_STRIPED_RABBIT_REGISTRY_OBJECT.get(), E2JEntityRendererFactories.rabbitRendererFactory(RegistryNames.BOLD_STRIPED_RABBIT_REGISTRY_NAME));
 
         event.registerBlockEntityRenderer(BlockEntityTypeInit.RAINBOW_BED.get(), RainbowBedBlockEntityRenderer::new);
+    }
+
+    private void setup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(BlockRendererInit::init);
     }
 }
