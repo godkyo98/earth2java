@@ -4,7 +4,6 @@
   "package": "slexom.earthtojava.mixins",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "CatRendererMixin",
     "DyeItemMixin",
     "ThrownEggMixin",
     "CarvedPumpkinBlockMixin",
@@ -12,6 +11,7 @@
     "WolfMixin"
   ],
   "client": [
+    "CatRendererMixin",
     "BlockEntityWithoutLevelRendererMixin"
   ],
   "injectors": {
