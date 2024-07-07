@@ -7,7 +7,7 @@ architectury {
     neoForge()
 }
 
-version = "${rootProject.mod_version}+${rootProject.minecraft_version}-neoforge"
+version = "neoforge-${rootProject.mod_version}+${rootProject.minecraft_version}"
 
 loom {
    accessWidenerPath.set(project(":common").file("src/main/resources/e2j.accesswidener"))

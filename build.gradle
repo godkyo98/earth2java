@@ -11,6 +11,13 @@ architectury {
 allprojects {
     version = "${rootProject.mod_version}+${rootProject.minecraft_version}"
     group = rootProject.maven_group
+
+    repositories {
+        maven {
+            name = 'ParchmentMC'
+            url = 'https://maven.parchmentmc.org'
+        }
+    }
 }
 
 subprojects {
@@ -25,7 +32,11 @@ subprojects {
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
         // The following line declares the mojmap mappings, you may use other mappings as well
-        mappings loom.officialMojangMappings()
+        // mappings loom.officialMojangMappings()
+        mappings loom.layered() {
+            officialMojangMappings()
+            parchment("org.parchmentmc.data:parchment-${rootProject.minecraft_version}:2024.07.07@zip")
+        }
     }
 
     java {

@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "slexom.earthtojava.mixins",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
     "DyeItemMixin",
     "ThrownEggMixin",
@@ -16,5 +16,6 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "refmap": "Earth2Java-common-refmap.json"
 }

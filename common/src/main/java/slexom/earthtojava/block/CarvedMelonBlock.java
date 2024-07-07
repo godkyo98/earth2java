@@ -5,7 +5,6 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -29,42 +28,66 @@ import java.util.function.Predicate;
 public class CarvedMelonBlock extends HorizontalDirectionalBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
     public static final MapCodec<CarvedMelonBlock> CODEC = simpleCodec(CarvedMelonBlock::new);
-    private static final Predicate<BlockState> IS_MELON = blockState -> blockState != null && (blockState.getBlock() == BlockInit.CARVED_MELON.get() || blockState.getBlock() == BlockInit.MELON_LANTERN.get());
+    private static final Predicate<BlockState> IS_MELON = blockState -> blockState != null && (blockState.is(BlockInit.CARVED_MELON.get()) || blockState.is(BlockInit.MELON_LANTERN.get()));
     @Nullable
-    private BlockPattern snowmanBasePattern;
+    private BlockPattern melonGolemBase;
     @Nullable
-    private BlockPattern snowmanPattern;
+    private BlockPattern melonGolemFull;
 
     public CarvedMelonBlock(Properties settings) {
         super(settings);
         registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
-    public static void spawnGolemInWorld(Level world, BlockPattern.BlockPatternMatch patternResult, MelonGolemEntity entity, BlockPos pos) {
-        clearPatternBlocks(world, patternResult);
-        entity.moveTo(pos.getX() + 0.5, pos.getY() + 0.05, pos.getZ() + 0.5, 0.0F, 0.0F);
-        world.addFreshEntity(entity);
-        for (ServerPlayer serverPlayer : world.getEntitiesOfClass(ServerPlayer.class, entity.getBoundingBox().inflate(5.0D))) {
-            CriteriaTriggers.SUMMONED_ENTITY.trigger(serverPlayer, entity);
+    @Override
+    @SuppressWarnings("deprecation")
+    protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        if (oldState.is(state.getBlock())) {
+            return;
         }
-
-        updatePatternBlocks(world, patternResult);
+        this.trySpawnGolem(level, pos);
     }
 
-    public static void clearPatternBlocks(Level world, BlockPattern.BlockPatternMatch patternResult) {
-        for (int i = 0; i < patternResult.getWidth(); ++i) {
-            for (int j = 0; j < patternResult.getHeight(); ++j) {
-                BlockInWorld cachedBlockPosition = patternResult.getBlock(i, j, 0);
-                world.setBlock(cachedBlockPosition.getPos(), Blocks.AIR.defaultBlockState(), 2);
-                world.levelEvent(2001, cachedBlockPosition.getPos(), Block.getId(cachedBlockPosition.getState()));
+    public boolean canSpawnGolem(LevelReader level, BlockPos pos) {
+        return getOrCreateSnowGolemBase().find(level, pos) != null;
+    }
+
+    private void trySpawnGolem(Level level, BlockPos pos) {
+        BlockPattern.BlockPatternMatch blockPatternMatch = getOrCreateSnowGolemFull().find(level, pos);
+        if (blockPatternMatch != null) {
+            MelonGolemEntity melonGolemEntity = EntityTypesInit.MELON_GOLEM_REGISTRY_OBJECT.get().create(level);
+
+            if (melonGolemEntity != null) {
+                spawnGolemInWorld(level, blockPatternMatch, melonGolemEntity, blockPatternMatch.getBlock(0, 2, 0).getPos());
             }
         }
     }
 
-    public static void updatePatternBlocks(Level level, BlockPattern.BlockPatternMatch blockPatternMatch) {
-        for (int i = 0; i < blockPatternMatch.getWidth(); ++i) {
-            for (int j = 0; j < blockPatternMatch.getHeight(); ++j) {
-                BlockInWorld blockInWorld = blockPatternMatch.getBlock(i, j, 0);
+    public static void spawnGolemInWorld(Level level, BlockPattern.BlockPatternMatch patternMatch, MelonGolemEntity entity, BlockPos pos) {
+        clearPatternBlocks(level, patternMatch);
+        entity.moveTo(pos.getX() + 0.5, pos.getY() + 0.05, pos.getZ() + 0.5, 0.0F, 0.0F);
+        level.addFreshEntity(entity);
+        for (ServerPlayer serverPlayer : level.getEntitiesOfClass(ServerPlayer.class, entity.getBoundingBox().inflate(5.0D))) {
+            CriteriaTriggers.SUMMONED_ENTITY.trigger(serverPlayer, entity);
+        }
+
+        updatePatternBlocks(level, patternMatch);
+    }
+
+    public static void clearPatternBlocks(Level level, BlockPattern.BlockPatternMatch patternMatch) {
+        for (int i = 0; i < patternMatch.getWidth(); ++i) {
+            for (int j = 0; j < patternMatch.getHeight(); ++j) {
+                BlockInWorld blockInWorld = patternMatch.getBlock(i, j, 0);
+                level.setBlock(blockInWorld.getPos(), Blocks.AIR.defaultBlockState(), 2);
+                level.levelEvent(2001, blockInWorld.getPos(), Block.getId(blockInWorld.getState()));
+            }
+        }
+    }
+
+    public static void updatePatternBlocks(Level level, BlockPattern.BlockPatternMatch patternMatch) {
+        for (int i = 0; i < patternMatch.getWidth(); ++i) {
+            for (int j = 0; j < patternMatch.getHeight(); ++j) {
+                BlockInWorld blockInWorld = patternMatch.getBlock(i, j, 0);
                 level.blockUpdated(blockInWorld.getPos(), Blocks.AIR);
             }
         }
@@ -74,28 +97,6 @@ public class CarvedMelonBlock extends HorizontalDirectionalBlock {
         return CODEC;
     }
 
-    @Override
-    @SuppressWarnings("deprecation")
-    protected void onPlace(BlockState blockState, Level level, BlockPos blockPos, BlockState blockState2, boolean bl) {
-        if (!blockState2.is(blockState.getBlock())) {
-            this.trySpawnGolem(level, blockPos);
-        }
-    }
-
-    public boolean canSpawnGolem(LevelReader levelReader, BlockPos blockPos) {
-        return getSnowmanBasePattern().find(levelReader, blockPos) != null;
-    }
-
-    private void trySpawnGolem(Level world, BlockPos pos) {
-        BlockPattern.BlockPatternMatch result = getSnowmanPattern().find(world, pos);
-        if (result != null) {
-            MelonGolemEntity melonGolemEntity = EntityTypesInit.MELON_GOLEM_REGISTRY_OBJECT.get().create(world);
-
-            if (melonGolemEntity != null) {
-                spawnGolemInWorld(world, result, melonGolemEntity, result.getBlock(0, 2, 0).getPos());
-            }
-        }
-    }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
@@ -108,18 +109,18 @@ public class CarvedMelonBlock extends HorizontalDirectionalBlock {
         builder.add(FACING);
     }
 
-    private BlockPattern getSnowmanBasePattern() {
-        if (snowmanBasePattern == null) {
-            snowmanBasePattern = BlockPatternBuilder.start().aisle(" ", "#", "#").where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SNOW_BLOCK))).build();
+    private BlockPattern getOrCreateSnowGolemBase() {
+        if (melonGolemBase == null) {
+            melonGolemBase = BlockPatternBuilder.start().aisle(" ", "#", "#").where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SNOW_BLOCK))).build();
         }
-        return snowmanBasePattern;
+        return melonGolemBase;
     }
 
-    private BlockPattern getSnowmanPattern() {
-        if (snowmanPattern == null) {
-            snowmanPattern = BlockPatternBuilder.start().aisle("^", "#", "#").where('^', BlockInWorld.hasState(IS_MELON)).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SNOW_BLOCK))).build();
+    private BlockPattern getOrCreateSnowGolemFull() {
+        if (melonGolemFull == null) {
+            melonGolemFull = BlockPatternBuilder.start().aisle("^", "#", "#").where('^', BlockInWorld.hasState(IS_MELON)).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.SNOW_BLOCK))).build();
         }
-        return snowmanPattern;
+        return melonGolemFull;
     }
 
 }

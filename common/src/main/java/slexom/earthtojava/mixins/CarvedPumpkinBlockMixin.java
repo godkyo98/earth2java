@@ -36,7 +36,7 @@ public class CarvedPumpkinBlockMixin {
     private BlockPattern earth2java$furnaceGolemDispenserPattern;
 
     @Unique
-    private BlockPattern earth2java_getFurnaceGolemPattern() {
+    private BlockPattern earth2java$getFurnaceGolemPattern() {
         if (earth2java$furnaceGolemPattern == null) {
             earth2java$furnaceGolemPattern = BlockPatternBuilder.start().aisle("~^~", "#@#", "~#~").where('@', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.BLAST_FURNACE))).where('^', BlockInWorld.hasState(PUMPKINS_PREDICATE)).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK))).where('~', pos -> pos.getState().isAir()).build();
         }
@@ -44,7 +44,7 @@ public class CarvedPumpkinBlockMixin {
     }
 
     @Unique
-    private BlockPattern earth2java_getFurnaceGolemDispenserPattern() {
+    private BlockPattern earth2java$getFurnaceGolemDispenserPattern() {
         if (earth2java$furnaceGolemDispenserPattern == null) {
             earth2java$furnaceGolemDispenserPattern = BlockPatternBuilder.start().aisle("~ ~", "#@#", "~#~").where('@', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.BLAST_FURNACE))).where('#', BlockInWorld.hasState(BlockStatePredicate.forBlock(Blocks.IRON_BLOCK))).where('~', pos -> pos.getState().isAir()).build();
         }
@@ -52,15 +52,15 @@ public class CarvedPumpkinBlockMixin {
     }
 
     @Inject(method = "canSpawnGolem", at = @At("RETURN"), cancellable = true)
-    public void earth2java_canSpawnGolem(LevelReader levelReader, BlockPos blockPos, CallbackInfoReturnable<Boolean> cir) {
+    public void earth2java$canSpawnGolem(LevelReader level, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         if (!cir.getReturnValue()) {
-            cir.setReturnValue(earth2java_getFurnaceGolemDispenserPattern().find(levelReader, blockPos) != null);
+            cir.setReturnValue(earth2java$getFurnaceGolemDispenserPattern().find(level, pos) != null);
         }
     }
 
     @Inject(at = @At("HEAD"), method = "trySpawnGolem")
-    public void earth2java_spawnFurnaceGolem(Level level, BlockPos blockPos, CallbackInfo ci) {
-        BlockPattern.BlockPatternMatch result = earth2java_getFurnaceGolemPattern().find(level, blockPos);
+    public void earth2java$spawnFurnaceGolem(Level level, BlockPos blockPos, CallbackInfo ci) {
+        BlockPattern.BlockPatternMatch result = earth2java$getFurnaceGolemPattern().find(level, blockPos);
         if (result == null) return;
 
         FurnaceGolemEntity furnaceGolemEntity = EntityTypesInit.FURNACE_GOLEM_REGISTRY_OBJECT.get().create(level);

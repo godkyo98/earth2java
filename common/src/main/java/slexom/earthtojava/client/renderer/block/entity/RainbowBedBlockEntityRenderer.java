@@ -6,12 +6,6 @@ import com.mojang.math.Axis;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartNames;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
@@ -37,7 +31,8 @@ import slexom.earthtojava.init.BlockEntityTypeInit;
 import slexom.earthtojava.init.EntityModelLayersInit;
 
 @Environment(EnvType.CLIENT)
-public class RainbowBedBlockEntityRenderer implements BlockEntityRenderer<RainbowBedBlockEntity> {
+public class
+RainbowBedBlockEntityRenderer implements BlockEntityRenderer<RainbowBedBlockEntity> {
     private final ModelPart head;
     private final ModelPart foot;
 
