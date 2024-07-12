@@ -11,31 +11,25 @@ architectury {
     fabric()
 }
 
-
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
-    runs {
-        //
-        // This adds a new gradle task that runs the datagen API: "gradlew runDatagenClient"
-        //
-        datagenClient {
-            inherit client
-            name "Data Generation"
-            vmArg "-Dfabric-api.datagen"
-            vmArg "-Dfabric-api.datagen.output-dir=${file("src/main/generated")}"
-            vmArg "-Dfabric-api.datagen.modid=earth2javamobs"
-
-            runDir "build/datagen"
-        }
-    }
 }
 
 configurations {
-    common
-    shadowCommon
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
     developmentFabric.extendsFrom common
+
+    // Files in this configuration will be bundled into your mod using the Shadow plugin.
+    // Don't use the `shadow` configuration from the plugin itself as it's meant for excluding files.
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
 }
 
 repositories {
@@ -43,12 +37,13 @@ repositories {
 }
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
-    modApi "dev.architectury:architectury-fabric:${rootProject.architectury_api_version}"
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    modImplementation "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+
+    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
+    shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 
     modCompileOnly("com.terraformersmc:modmenu:${rootProject.mod_menu_version}") { transitive false }
     modApi("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}") {
@@ -76,51 +71,10 @@ processResources {
 }
 
 shadowJar {
-    exclude "architectury.common.json"
-
-    configurations = [project.configurations.shadowCommon]
-    archiveClassifier.set("dev-shadow")
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
 }
 
 remapJar {
-    injectAccessWidener = true
-    inputFile.set shadowJar.archiveFile
-    dependsOn shadowJar
-    archiveClassifier.set(null)
+    input.set shadowJar.archiveFile
 }
-
-jar {
-    archiveClassifier.set("dev")
-}
-
-sourcesJar {
-    def commonSources = project(":common").sourcesJar
-    dependsOn commonSources
-    from commonSources.archiveFile.map { zipTree(it) }
-}
-
-components.java {
-    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
-        skip()
-    }
-}
-
-repositories {
-    maven {
-        name = 'Fabric'
-        url = 'https://maven.fabricmc.net/'
-    }
-}
-/*
-publishing {
-    publications {
-        mavenFabric(MavenPublication) {
-            artifactId = rootProject.mod_id + "-" + project.name
-            from components.java
-        }
-    }
-
-    repositories {
-    }
-}
-*/
