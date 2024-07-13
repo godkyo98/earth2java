@@ -1,63 +1,87 @@
 {
-    "type": "minecraft:entity",
-    "pools": [
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
         {
-            "rolls": 1,
-            "entries": [
-                {
-                    "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_count",
-                            "count": {
-                                "min": 0.0,
-                                "max": 2.0,
-                                "type": "minecraft:uniform"
-                            }
-                        },
-                        {
-                            "function": "minecraft:looting_enchant",
-                            "count": {
-                                "min": 0.0,
-                                "max": 1.0
-                            }
-                        }
-                    ],
-                    "name": "earthtojavamobs:fancy_feather"
-                }
-            ]
-        },
-        {
-            "rolls": 1,
-            "entries": [
-                {
-                    "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:furnace_smelt",
-                            "conditions": [
-                                {
-                                    "condition": "minecraft:entity_properties",
-                                    "predicate": {
-                                        "flags": {
-                                            "is_on_fire": true
-                                        }
-                                    },
-                                    "entity": "this"
-                                }
-                            ]
-                        },
-                        {
-                            "function": "minecraft:looting_enchant",
-                            "count": {
-                                "min": 0.0,
-                                "max": 1.0
-                            }
-                        }
-                    ],
-                    "name": "minecraft:chicken"
-                }
-            ]
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            },
+            {
+              "function": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ],
+          "name": "earthtojavamobs:fancy_feather"
         }
-    ]
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "conditions": [
+                {
+                  "condition": "minecraft:any_of",
+                  "terms": [
+                    {
+                      "condition": "minecraft:entity_properties",
+                      "entity": "this",
+                      "predicate": {
+                        "flags": {
+                          "is_on_fire": true
+                        }
+                      }
+                    },
+                    {
+                      "condition": "minecraft:entity_properties",
+                      "entity": "direct_attacker",
+                      "predicate": {
+                        "equipment": {
+                          "mainhand": {
+                            "predicates": {
+                              "minecraft:enchantments": [
+                                {
+                                  "enchantments": "#minecraft:smelts_loot"
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "function": "minecraft:furnace_smelt"
+            },
+            {
+              "function": "minecraft:enchanted_count_increase",
+              "enchantment": "minecraft:looting",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ],
+          "name": "minecraft:chicken"
+        }
+      ]
+    }
+  ]
 }
