@@ -1,12 +1,12 @@
 {
-    "type": "minecraft:crafting_shapeless",
-    "group": "yellow_dye",
-    "ingredients": [
-        {
-            "item": "earthtojavamobs:buttercup"
-        }
-    ],
-    "result": {
-        "item": "minecraft:yellow_dye"
+  "type": "minecraft:crafting_shapeless",
+  "group": "yellow_dye",
+  "ingredients": [
+    {
+      "item": "earthtojavamobs:buttercup"
     }
+  ],
+  "result": {
+    "id": "minecraft:yellow_dye"
+  }
 }
