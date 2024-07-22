@@ -74,7 +74,9 @@
     },
     "entity.furnace_golem.attack": {
         "sounds": [
-            "earthtojavamobs:mob/furnace_golem/attack_01"
+            "earthtojavamobs:mob/furnace_golem/attack_01",
+            "earthtojavamobs:mob/furnace_golem/attack_02",
+            "earthtojavamobs:mob/furnace_golem/attack_03"
         ]
     },
     "entity.jolly_llama.bell": {
